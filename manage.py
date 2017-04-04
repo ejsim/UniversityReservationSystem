@@ -7,7 +7,7 @@ from flask_migrate import Migrate, MigrateCommand
 from flask_script import Manager, Shell
 from redis import Redis
 from rq import Connection, Queue, Worker
-
+import flask_restless
 from app import create_app, db
 from app.models import Role, User
 
@@ -43,6 +43,8 @@ def recreate_db():
     db.drop_all()
     db.create_all()
     db.session.commit()
+
+
 
 
 @manager.option(
