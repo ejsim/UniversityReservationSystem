@@ -9,7 +9,7 @@ from redis import Redis
 from rq import Connection, Queue, Worker
 import flask_restless
 from app import create_app, db
-from app.models import Role, User
+from app.models import *
 
 
 app = create_app(os.getenv('FLASK_CONFIG') or 'default')
@@ -44,6 +44,33 @@ def recreate_db():
     db.create_all()
     db.session.commit()
 
+@manager.command
+def add_test_data():
+    db.drop_all()
+    db.create_all()
+    setup_general()
+    campus = Campus(name='Tufts', city='Medford', state='MA')
+    db.session.add(campus)
+    db.session.commit()
+
+
+    space_type = Space_Type(name='classroom', description='A room for students to congregate')
+    db.session.add(space_type)
+    db.session.commit()
+
+
+    location1 = Location(name='Halligan Hall', city='Medford', state='MA', zip_code='02144', address_line_1='161 College Ave', campus_id=1)
+    location2 = Location(name='Tisch Library', city='Medford', state='MA', zip_code='02144', address_line_1='35 Professors Row', campus_id=1)
+    db.session.add(location1)
+    db.session.add(location2)
+    db.session.commit()
+
+
+    space1 = Space(name='102', capacity=15, space_type_id=1, location_id=1)
+    space2 = Space(name='116', capacity=4, space_type_id=1, location_id=2)
+    db.session.add(space1)
+    db.session.add(space2)
+    db.session.commit()
 
 
 
