@@ -49,28 +49,40 @@ def add_test_data():
     db.drop_all()
     db.create_all()
     setup_general()
-    campus = Campus(name='Tufts', city='Medford', state='MA')
+    campus = Campus(name='Tufts Medford/Somerville', city='Medford', state='MA')
     db.session.add(campus)
     db.session.commit()
 
 
-    space_type = Space_Type(name='classroom', description='A room for students to congregate')
-    db.session.add(space_type)
+    space_type1 = Space_Type(name='Classroom', description='A room where teaching occurs')
+    space_type2 = Space_Type(name='Study Room', description='A room where studying occurs')
+    db.session.add(space_type1)
+    db.session.add(space_type2)
     db.session.commit()
 
+    ammenity1 = Ammenity_Type(name='Projector')
+    ammenity2 = Ammenity_Type(name='Whiteboard')
+    ammenity3 = Ammenity_Type(name='Lawn')
+    db.session.add_all([ammenity1, ammenity2, ammenity3])
 
     location1 = Location(name='Halligan Hall', city='Medford', state='MA', zip_code='02144', address_line_1='161 College Ave', campus_id=1)
     location2 = Location(name='Tisch Library', city='Medford', state='MA', zip_code='02144', address_line_1='35 Professors Row', campus_id=1)
-    db.session.add(location1)
-    db.session.add(location2)
+    db.session.add_all([location1, location2])
     db.session.commit()
 
 
     space1 = Space(name='102', capacity=15, space_type_id=1, location_id=1)
     space2 = Space(name='116', capacity=4, space_type_id=1, location_id=2)
-    db.session.add(space1)
-    db.session.add(space2)
+    space3 = Space(name='Kitchen', capacity=15, space_type_id=1, location_id=1)
+    db.session.add_all([space1, space2, space3])
     db.session.commit()
+
+    space_ammenity1 = Space_Ammenity(space_id = db.session.query(Space).order_by('name')[0].id, ammenity_type_id=db.session.query(Ammenity_Type).order_by('name')[0].id)
+    space_ammenity2 = Space_Ammenity(space_id = db.session.query(Space).order_by('name')[1].id, ammenity_type_id=db.session.query(Ammenity_Type).order_by('name')[1].id)
+    space_ammenity3 = Space_Ammenity(space_id = db.session.query(Space).order_by('name')[2].id, ammenity_type_id=db.session.query(Ammenity_Type).order_by('name')[2].id)
+    db.session.add_all([space_ammenity1, space_ammenity2, space_ammenity3])
+    db.session.commit()
+
 
 
 

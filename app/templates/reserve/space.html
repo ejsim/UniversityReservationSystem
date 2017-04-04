@@ -17,11 +17,13 @@
             } %}
 
             {{ f.begin_form(form, flashes) }}
-            {{ f.render_form_field(form.event_name) }}
-            {{ f.render_form_field(form.location) }}
-            {{ f.render_form_field(form.space) }}
+            {{ f.render_form_field(form.campus) }}
+            {{ f.render_form_field(form.space_type) }}
+            {{ f.render_form_field(form.capacity) }}
+            {{ f.render_form_field(form.ammenities) }}
             {{ f.render_form_field(form.start_time) }}
             {{ f.render_form_field(form.end_time) }}
+
 
             {{ f.form_message(flashes['error'], header='Something went wrong.', class='error') }}
             {{ f.form_message(flashes['warning'], header='Hm.', class='warning') }}
@@ -35,4 +37,62 @@
             {{ f.end_form(form) }}
         </div>
     </div>
+
+    <script>
+
+/*$(function() {
+
+    // jQuery selection for the 2 select boxes
+    var dropdown = {
+        location: $('#select_location'),
+        space: $('#select_space')
+    };
+
+    // call to update on load
+    updateSpaces();
+
+    // function to call XHR and update county dropdown
+    function updateSpaces() {
+        var send = {
+            location: dropdown.location.val()
+        };
+        dropdown.space.attr('disabled', 'disabled');
+        dropdown.space.empty();
+        console.log("after empty");
+        console.log(dropdown.space);
+
+        $.getJSON("{{ url_for('reserve._get_spaces') }}", send, function(data) {
+            console.log("appending");
+            dropdown.space.append(
+                $('<option>', {
+                    selected: "1",
+                    value: "0",
+                    text: "---"
+                })
+            );
+            data.forEach(function(item) {
+              console.log("adding element");
+
+                dropdown.space.append(
+                    $('<option>', {
+                        value: item[0],
+                        text: item[1]
+                    })
+                );
+            });
+            console.log(dropdown.space);
+            dropdown.space.removeAttr('disabled');
+
+            dropdown.space.hide().fadeIn('fast');
+        });
+    }
+
+    // event listener to state dropdown change
+    dropdown.location.on('change', function() {
+        updateSpaces();
+    });
+
+});*/
+
+</script>
 {% endblock %}

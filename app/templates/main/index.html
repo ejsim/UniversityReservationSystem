@@ -5,8 +5,8 @@
 
     <div class="jumbotron">
       <div class="container">
-        <h1>Hello {% if not (current_user.is_authenticated) %} world {% else %} {{ current_user.full_name() }}{% endif %}!</h1>
-        <h1>I want to...</h1>
+        {% if (current_user.is_authenticated) %}<h1>Welcome {{ current_user.full_name() }}</h1>{% endif %}
+        <h2>I want to...</h2>
         <p><a class="btn btn-primary btn-lg" href="{% if not (current_user.is_authenticated) %}{{ url_for("account.login")}}{% else %}{{ url_for("reserve.space") }}{% endif %}" role="button">Reserve a Space &raquo;</a></p>
         <!--<div class="form-inline">
           <p><a class="btn btn-primary btn-lg" href="#" role="button">Reserve Equipment &raquo;</a></p>

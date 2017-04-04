@@ -104,7 +104,7 @@ class Space(db.Model):
 class Ammenity_Type(db.Model):
     __tablename__ = 'ammenity_types'
     id = db.Column(db.Integer, primary_key=True)
-    type_name = db.Column(db.String(2044), unique=True)
+    name = db.Column(db.String(2044), unique=True)
     description = db.Column(db.String(2044))
     date_created = db.Column(db.DateTime, default=datetime.datetime.utcnow)
     created_by = db.Column(db.Integer, db.ForeignKey('users.id'))
