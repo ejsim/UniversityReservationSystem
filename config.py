@@ -19,7 +19,7 @@ if os.path.exists('config.env'):
 
 
 class Config:
-    APP_NAME = 'URS'
+    APP_NAME = 'University Reservation System'
     if os.environ.get('SECRET_KEY'):
         SECRET_KEY = os.environ.get('SECRET_KEY')
     else:
