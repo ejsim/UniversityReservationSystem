@@ -49,38 +49,102 @@ def add_test_data():
     db.drop_all()
     db.create_all()
     setup_general()
-    campus = Campus(name='Tufts Medford/Somerville', city='Medford', state='MA')
-    db.session.add(campus)
+
+    campus1 = Campus(name='Tufts Medford/Somerville', city='Medford', state='MA')
+    campus2 = Campus(name='Tufts Grafton', city='Grafton', state='MA')
+    db.session.add_all([campus1, campus2])
     db.session.commit()
 
+    space_types = ['Performance Hall', 'Lecture Hall', 'Dorm Room', 'Dorm Common Room', 'Conference Room', 'Athletic Field', 'Outdoor Area']
 
+    for s in space_types:
+        db.session.add(Space_Type(name=s))
     space_type1 = Space_Type(name='Classroom', description='A room where teaching occurs')
     space_type2 = Space_Type(name='Study Room', description='A room where studying occurs')
-    db.session.add(space_type1)
-    db.session.add(space_type2)
+    db.session.add_all([space_type1, space_type2])
     db.session.commit()
 
-    ammenity1 = Ammenity_Type(name='Projector')
-    ammenity2 = Ammenity_Type(name='Whiteboard')
-    ammenity3 = Ammenity_Type(name='Lawn')
-    db.session.add_all([ammenity1, ammenity2, ammenity3])
+    ammenities = ['Projector', 'Whiteboard', 'Lawn', 'Table', 'Chairs', 'Light', 'Hescott', 'Chow']
+    for a in ammenities:
+        db.session.add(Ammenity_Type(name=a))
+    db.session.commit()
 
     location1 = Location(name='Halligan Hall', city='Medford', state='MA', zip_code='02144', address_line_1='161 College Ave', campus_id=1)
     location2 = Location(name='Tisch Library', city='Medford', state='MA', zip_code='02144', address_line_1='35 Professors Row', campus_id=1)
-    db.session.add_all([location1, location2])
+    location3 = Location(name='Eaton Hall', city='Medford', state='MA', zip_code='02144', address_line_1='19 Professors Row', campus_id=1)
+    location4 = Location(name='Olin Hall', city='Medford', state='MA', zip_code='02144', address_line_1='2 Professors Row', campus_id=1)
+    location5 = Location(name="President's Lawn", city='Medford', state='MA', zip_code='02144', address_line_1='4 Professors Row', campus_id=1)
+    location6 = Location(name='Tennis Courts', city='Medford', state='MA', zip_code='02144', address_line_1='26 Curtis Ave', campus_id=1)
+
+    db.session.add_all([location1, location2, location3, location4, location5, location6])
     db.session.commit()
 
+    #Space Types
+    # 1: Performance Hall
+    # 2: Lecture Hall
+    # 3: Dorm Room
+    # 4: Dorm Common Room
+    # 5: Conference Room
+    # 6: Athletic fields
+    # 7: Outdoor Area
+    # 8: Classroom
+    # 9: Study Room
 
-    space1 = Space(name='102', capacity=15, space_type_id=1, location_id=1)
-    space2 = Space(name='116', capacity=4, space_type_id=1, location_id=2)
-    space3 = Space(name='Kitchen', capacity=15, space_type_id=1, location_id=1)
+    #Halligan id=1
+    space1 = Space(name='102', capacity=15, space_type_id=8, location_id=1)
+    space2 = Space(name='211', capacity=15, space_type_id=8, location_id=1)
+    space3 = Space(name='Kitchen', capacity=15, space_type_id=5, location_id=1)
     db.session.add_all([space1, space2, space3])
+
+    #Tisch id=2
+    space1 = Space(name='113a', capacity=15, space_type_id=9, location_id=2)
+    space2 = Space(name='Downstairs Computer Lab', capacity=15, space_type_id=8, location_id=2)
+    space3 = Space(name='112b', capacity=15, space_type_id=9, location_id=2)
+    db.session.add_all([space1, space2, space3])
+
+    #Eaton id=3
+    space1 = Space(name='Computer Lab', capacity=15, space_type_id=8, location_id=3)
+    space2 = Space(name='105', capacity=15, space_type_id=8, location_id=3)
+    space3 = Space(name='210', capacity=15, space_type_id=8, location_id=3)
+    db.session.add_all([space1, space2, space3])
+
+    #Olin id=4
+    space1 = Space(name='102', capacity=15, space_type_id=8, location_id=4)
+    space2 = Space(name='Downstairs Lobby', capacity=15, space_type_id=5, location_id=4)
+    space3 = Space(name='212', capacity=15, space_type_id=5, location_id=4)
+    db.session.add_all([space1, space2, space3])
+
+    #Pres-Lawn id=5
+    space1 = Space(name='Outside of President House', capacity=15, space_type_id=7, location_id=5)
+    space2 = Space(name='The Lighting Ceremony Spot', capacity=15, space_type_id=7, location_id=5)
+    space3 = Space(name='Spring Fling Space', capacity=15, space_type_id=7, location_id=5)
+    db.session.add_all([space1, space2, space3])
+
+    #Tennis Courts id=6
+    space1 = Space(name='Court 1', space_type_id=6, location_id=6)
+    space2 = Space(name='Court 2', space_type_id=6, location_id=6)
+    space3 = Space(name='Court 3', space_type_id=6, location_id=6)
+    db.session.add_all([space1, space2, space3])
+
     db.session.commit()
 
-    space_ammenity1 = Space_Ammenity(space_id = db.session.query(Space).order_by('name')[0].id, ammenity_type_id=db.session.query(Ammenity_Type).order_by('name')[0].id)
-    space_ammenity2 = Space_Ammenity(space_id = db.session.query(Space).order_by('name')[1].id, ammenity_type_id=db.session.query(Ammenity_Type).order_by('name')[1].id)
-    space_ammenity3 = Space_Ammenity(space_id = db.session.query(Space).order_by('name')[2].id, ammenity_type_id=db.session.query(Ammenity_Type).order_by('name')[2].id)
-    db.session.add_all([space_ammenity1, space_ammenity2, space_ammenity3])
+    # WhiteBoards
+    space_ammenity1 = Space_Ammenity(space_id = 1, ammenity_type_id=2)
+    space_ammenity2 = Space_Ammenity(space_id = 2, ammenity_type_id=2)
+    space_ammenity3 = Space_Ammenity(space_id = 7, ammenity_type_id=2)
+    space_ammenity4 = Space_Ammenity(space_id = 8, ammenity_type_id=2)
+    space_ammenity5 = Space_Ammenity(space_id = 9, ammenity_type_id=2)
+    space_ammenity6 = Space_Ammenity(space_id = 10, ammenity_type_id=2)
+
+    space_ammenity7 = Space_Ammenity(space_id = 1, ammenity_type_id=3)
+    space_ammenity8 = Space_Ammenity(space_id = 1, ammenity_type_id=4)
+    space_ammenity9 = Space_Ammenity(space_id = 1, ammenity_type_id=5)
+    space_ammenity10 = Space_Ammenity(space_id = 2, ammenity_type_id=6)
+    space_ammenity11 = Space_Ammenity(space_id = 2, ammenity_type_id=7)
+    space_ammenity12 = Space_Ammenity(space_id = 3, ammenity_type_id=8)
+
+
+    db.session.add_all([space_ammenity1, space_ammenity2, space_ammenity3, space_ammenity4, space_ammenity5, space_ammenity6, space_ammenity7, space_ammenity8, space_ammenity9, space_ammenity10, space_ammenity11, space_ammenity12])
     db.session.commit()
 
 

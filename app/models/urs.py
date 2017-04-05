@@ -1,6 +1,7 @@
 from .. import db
 import datetime
 import enum
+from sqlalchemy import UniqueConstraint
 
 class Campus(db.Model):
     __tablename__ = 'campuses'
@@ -91,7 +92,7 @@ class Space_Type(db.Model):
 class Space(db.Model):
     __tablename__ = 'spaces'
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(2044), unique=True)
+    name = db.Column(db.String(2044))
     capacity = db.Column(db.Integer)
     location_id = db.Column(db.Integer, db.ForeignKey('locations.id'))
     space_type_id = db.Column(db.Integer, db.ForeignKey('space_types.id'))
@@ -100,6 +101,7 @@ class Space(db.Model):
     created_by = db.Column(db.Integer, db.ForeignKey('users.id'))
     last_updated = db.Column(db.DateTime, default=datetime.datetime.utcnow)
     last_updated_by = db.Column(db.Integer, db.ForeignKey('users.id'))
+    UniqueConstraint('name', 'location_id', name='space_for_location')
 
 class Ammenity_Type(db.Model):
     __tablename__ = 'ammenity_types'
@@ -121,6 +123,8 @@ class Space_Ammenity(db.Model):
     created_by = db.Column(db.Integer, db.ForeignKey('users.id'))
     last_updated = db.Column(db.DateTime, default=datetime.datetime.utcnow)
     last_updated_by = db.Column(db.Integer, db.ForeignKey('users.id'))
+    UniqueConstraint('space_id', 'ammenity_type_id', name='space_ammenity_index')
+
 
 class Space_Reservation(db.Model):
     __tablename__ = 'space_reservations'

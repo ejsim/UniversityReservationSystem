@@ -1,7 +1,7 @@
 from flask_wtf import Form
 from wtforms import ValidationError
 from wtforms.ext.sqlalchemy.fields import QuerySelectMultipleField, QuerySelectField
-from wtforms.fields import PasswordField, StringField, SubmitField, DateField, DateTimeField
+from wtforms.fields import PasswordField, StringField, SubmitField, DateField, DateTimeField, IntegerField
 from wtforms.fields.html5 import EmailField
 from wtforms.validators import Email, EqualTo, InputRequired, Length, NumberRange
 
@@ -21,7 +21,7 @@ class ReserveSpaceForm(Form):
         validators=[InputRequired()],
         query_factory=lambda: db.session.query(Space_Type).order_by('name'),
         id='select_space_type')
-    capacity = StringField('Capacity', [NumberRange(min=1, max=10000, message='Capacity not valid')])
+    capacity = IntegerField('Capacity', [NumberRange(min=1, max=10000, message='Capacity not valid')])
     ammenities = QuerySelectMultipleField(
         'Ammmenities',
         validators=[],
@@ -29,7 +29,7 @@ class ReserveSpaceForm(Form):
         query_factory=lambda: db.session.query(Ammenity_Type).order_by('name'),
         id='select_space_ammenities')
     start_time = DateTimeField(
-        'Start Time', format='%H:%M')
+        'Start Time', format='%Y-%m-%d %H:%M:%S')
     end_time = DateTimeField(
-        'End Time', format='%H:%M')
+        'End Time', format='%Y-%m-%d %H:%M:%S')
     search = SubmitField('Search')
