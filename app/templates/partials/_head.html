@@ -3,8 +3,14 @@
 <title>{% block page_title %}{{ config.APP_NAME }}{% endblock %}</title>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-<script  type="text/javascript" src="{{ url_for('static', filename='calendar.min.js') }}"></script>
-<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='calendar.min.css') }}">
+
+<script src="https://cdn.rawgit.com/mdehoog/Semantic-UI-Calendar/76959c6f7d33a527b49be76789e984a0a407350b/dist/calendar.min.js"></script>
+<link href="https://cdn.rawgit.com/mdehoog/Semantic-UI-Calendar/76959c6f7d33a527b49be76789e984a0a407350b/dist/calendar.min.css" rel="stylesheet" type="text/css" />
+
+
+
+{#<script  type="text/javascript" src="{{ url_for('static', filename='calendar.min.js') }}"></script>
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='calendar.min.css') }}">#}
 
 {% assets 'vendor_css' %}<link rel="stylesheet" type="text/css" href="{{ ASSET_URL }}">{% endassets %}
 {% assets 'app_css' %}<link rel="stylesheet" type="text/css" href="{{ ASSET_URL }}">{% endassets %}
