@@ -7,7 +7,7 @@
     <div class="eight wide computer sixteen wide mobile column centered">
         {% if (current_user.is_authenticated) %}<h1>Welcome {{ current_user.full_name() }}</h1>{% endif %}
         <h1>I want to...</h1>
-        <button class="ui button primary">Reserve a Space</button>
+        <a href="{% if not (current_user.is_authenticated) %}{{ url_for("account.login")}}{% else %}{{ url_for("reserve.space") }}{% endif %}"><button class="ui button primary"> Reserve a Space</button></a>
         <!-- href="{% if not (current_user.is_authenticated) %}{{ url_for("account.login")}}{% else %}{{ url_for("reserve.space") }}{% endif %}">-->
       </div>
     </div>

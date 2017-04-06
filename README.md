@@ -130,7 +130,7 @@ Note that this will create an admin user with email and password specified by th
 ##### [Optional] Add fake data to the database
 
 ```
-$ python manage.py add_fake_data
+$ python manage.py add_test_data
 ```
 
 ## Running the app
