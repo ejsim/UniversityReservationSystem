@@ -1,7 +1,7 @@
 from flask import abort, flash, redirect, render_template, url_for, request, jsonify
 from flask_login import current_user, login_required
 from flask_rq import get_queue
-from sqlalchemy import text
+from sqlalchemy import *
 from . import reserve
 from .. import db
 from ..models import *
@@ -13,7 +13,7 @@ import sys
 def space():
     form = ReserveSpaceForm()
     if form.validate_on_submit():
-        find_spaces_placeholder = """SELECT s.*, l.name, c.name
+        find_spaces_placeholder = """SELECT s.*, l.name AS location_name, CONCAT(l.name, ' ', s.name) AS full_name, c.name AS campus_name
         FROM spaces s
         JOIN locations l ON s.location_id = l.id
         JOIN campuses c ON l.campus_id = c.id
@@ -25,9 +25,13 @@ def space():
         WHERE sa.space_id = s.id) = {};"""
 
         find_spaces = text(find_spaces_placeholder.format(str(form.space_type.data.id), str(form.campus.data.id), str(form.end_time.data), str(form.start_time.data), ','.join(list(map((lambda a: str(a.id)), form.ammenities.data))),  str(len(form.ammenities.data))))
-        available_spaces = db.engine.execute(find_spaces)
-        for row in available_spaces:
-            print(row['id'], file=sys.stderr)
+        yes = True
+        response = db.engine.execute(find_spaces)
+        available_spaces = []
+        for space in response:
+            available_spaces.append(dict(zip(space.keys(), space)))
+        print(available_spaces, file=sys.stderr)
+        return render_template('reserve/space.html', form=form, available_spaces=available_spaces)
     return render_template('reserve/space.html', form=form)
 
 @reserve.route('/_get_spaces/')

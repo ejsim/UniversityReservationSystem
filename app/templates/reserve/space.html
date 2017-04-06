@@ -6,7 +6,7 @@
 
 {% block content %}
     <div class="ui grid container">
-        <div class="eight wide computer sixteen wide mobile centered column">
+        <div class="eight wide computer sixteen wide mobile column">
             <h2 class="ui dividing header">Reserve a Space</h2>
 
             {% set flashes = {
@@ -17,13 +17,34 @@
             } %}
 
             {{ f.begin_form(form, flashes) }}
+            <div class="two fields">
             {{ f.render_form_field(form.campus) }}
             {{ f.render_form_field(form.space_type) }}
+            </div>
+            <div class="two fields">
+                 <div class="field">
+                   <label>Start Time</label>
+                   <div class="ui calendar" id="rangestart">
+                     <div class="ui input left icon">
+                       <i class="calendar icon"></i>
+                       <input id="start_time" type="text" placeholder="Start">
+                     </div>
+                   </div>
+                 </div>
+                 <div class="field">
+                   <label>End Time</label>
+                   <div class="ui calendar" id="rangeend">
+                     <div class="ui input left icon">
+                       <i class="calendar icon"></i>
+                       <input id="start_time" type="text" placeholder="End">
+                     </div>
+                   </div>
+                 </div>
+            </div>
+            <div class="two fields">
             {{ f.render_form_field(form.capacity) }}
             {{ f.render_form_field(form.ammenities) }}
-            {{ f.render_form_field(form.start_time) }}
-            {{ f.render_form_field(form.end_time) }}
-
+            </div>
 
             {{ f.form_message(flashes['error'], header='Something went wrong.', class='error') }}
             {{ f.form_message(flashes['warning'], header='Hm.', class='warning') }}
@@ -35,10 +56,48 @@
             {% endfor %}
 
             {{ f.end_form(form) }}
+          </div>
+          {% if available_spaces %}
+            <div class="eight wide computer sixteen wide mobile column centered">
+            <div style="overflow-x: scroll;">
+                <table class="ui searchable sortable unstackable selectable celled table">
+                    <thead>
+                        <tr>
+                            <th>Location</th>
+                            <th class="sorted ascending">Space</th>
+                            <th>Capacity</th>
+                            <th>Condition</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                    {% for space in available_spaces %}
+
+                            <td>{{ space['location_name'] }}</td>
+                            <td>{{ space['name'] }}</td>
+                            <td>{{ space['capacity'] }}</td>
+                            <td>{{ space['condition'] }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                    {% endif %}
+                </table>
+            </div>
+
         </div>
     </div>
+    <script type="text/javascript">
 
-    <script>
+      $(document).ready(function() {
+        alert( "Ready" );
+        $('#rangestart').click(function() {
+          $('#rangestart').calendar();
+        });
+
+        $('#rangeend').calendar();
+      });
+
 
 /*$(function() {
 

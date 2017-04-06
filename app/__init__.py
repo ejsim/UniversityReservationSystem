@@ -40,13 +40,6 @@ def create_app(config_name):
     compress.init_app(app)
     RQ(app)
 
-    '''
-    api_manager = flask_restless.APIManager(app, flask_sqlalchemy_db=db)
-
-    api_manager.create_api(Campus, methods=['GET', 'POST', 'DELETE'])
-    api_manager.create_api(Location, methods=['GET', 'POST', 'DELETE'])
-    api_manager.create_api(Department, methods=['GET', 'POST', 'DELETE'])
-    '''
 
     # Register Jinja template functions
     from .utils import register_template_utils
