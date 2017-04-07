@@ -5,6 +5,7 @@
 {% endblock %}
 
 {% block content %}
+
     <div class="ui grid container">
         <div class="eight wide computer sixteen wide mobile column">
             <h2 class="ui dividing header">Reserve a Space</h2>
@@ -21,6 +22,7 @@
             {{ f.render_form_field(form.campus) }}
             {{ f.render_form_field(form.space_type) }}
             </div>
+
             <div class="two fields">
                  <div class="field">
                    <label>Start Time</label>
@@ -87,16 +89,19 @@
 
         </div>
     </div>
+    <!-- THESE SCRIPT TAGS NECESSARY FOR CALENDAR POP-UPS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.4/semantic.min.js"></script>
+    <script src="https://cdn.rawgit.com/mdehoog/Semantic-UI-Calendar/76959c6f7d33a527b49be76789e984a0a407350b/dist/calendar.min.js"></script>
+
     <script type="text/javascript">
-      $('#rangestart').calendar();
-      $('#rangeend').calendar();
-      $(document).ready(function() {
-        alert( "Ready" );
-
-
+      $('#rangestart').calendar({
+        type: 'date/time',
+        endCalendar: $('#rangeend')
       });
-
-
+      $('#rangeend').calendar({
+        type: 'date/time',
+        startCalendar: $('#rangestart')
+      });
 /*$(function() {
 
     // jQuery selection for the 2 select boxes
