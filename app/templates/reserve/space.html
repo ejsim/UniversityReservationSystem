@@ -67,7 +67,7 @@
           <!--</div> -->
           <br>
           {% if available_spaces %}
-          {% if len(available_spaces) > 0 %}
+          {% if available_spaces|length > 0 %}
             {# <div class="eight wide computer sixteen wide mobile column centered"> #}
             <div style="overflow-x: scroll;">
                 <table class="ui searchable sortable unstackable selectable celled table">
