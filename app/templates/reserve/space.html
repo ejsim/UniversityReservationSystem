@@ -25,20 +25,26 @@
 
             <div class="two fields">
                  <div class="field">
-                   <label>Start Time</label>
+                   <label>Start Time*</label>
                    <div class="ui calendar" id="rangestart">
                      <div class="ui input left icon">
                        <i class="calendar icon"></i>
-                       <input id="start_time" type="text" placeholder="Start">
+                       <input id="start_time" type="text" name="start_time" placeholder="Start">
                      </div>
                    </div>
+                   {% if form.start_time.errors %}
+                   <div class="ui red pointing label">
+                       {{ form.start_time.errors[0] | safe }}
+                   </div>
+                   {% endif %}
+
                  </div>
                  <div class="field">
-                   <label>End Time</label>
+                   <label>End Time*</label>
                    <div class="ui calendar" id="rangeend">
                      <div class="ui input left icon">
                        <i class="calendar icon"></i>
-                       <input id="start_time" type="text" placeholder="End">
+                       <input id="start_time" type="text" name="end_time" placeholder="End">
                      </div>
                    </div>
                  </div>
@@ -58,9 +64,11 @@
             {% endfor %}
 
             {{ f.end_form(form) }}
-          </div>
+          <!--</div> -->
+          <br>
           {% if available_spaces %}
-            <div class="eight wide computer sixteen wide mobile column centered">
+          {% if len(available_spaces) > 0 %}
+            {# <div class="eight wide computer sixteen wide mobile column centered"> #}
             <div style="overflow-x: scroll;">
                 <table class="ui searchable sortable unstackable selectable celled table">
                     <thead>
@@ -75,7 +83,7 @@
                     <tbody>
 
                     {% for space in available_spaces %}
-
+                        <tr onclick="window.location.href = '{{ url_for('reserve.space') }}';">
                             <td>{{ space['location_name'] }}</td>
                             <td>{{ space['name'] }}</td>
                             <td>{{ space['capacity'] }}</td>
@@ -83,78 +91,28 @@
                         </tr>
                     {% endfor %}
                     </tbody>
-                    {% endif %}
+
                 </table>
             </div>
 
         </div>
+        {% endif %}
+        {% else %}
+        <h2> No spaces found. </h2>
+        {% endif %}
     </div>
     <!-- THESE SCRIPT TAGS NECESSARY FOR CALENDAR POP-UPS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.4/semantic.min.js"></script>
     <script src="https://cdn.rawgit.com/mdehoog/Semantic-UI-Calendar/76959c6f7d33a527b49be76789e984a0a407350b/dist/calendar.min.js"></script>
 
     <script type="text/javascript">
+
       $('#rangestart').calendar({
-        type: 'date/time',
         endCalendar: $('#rangeend')
       });
       $('#rangeend').calendar({
-        type: 'date/time',
         startCalendar: $('#rangestart')
       });
-/*$(function() {
-
-    // jQuery selection for the 2 select boxes
-    var dropdown = {
-        location: $('#select_location'),
-        space: $('#select_space')
-    };
-
-    // call to update on load
-    updateSpaces();
-
-    // function to call XHR and update county dropdown
-    function updateSpaces() {
-        var send = {
-            location: dropdown.location.val()
-        };
-        dropdown.space.attr('disabled', 'disabled');
-        dropdown.space.empty();
-        console.log("after empty");
-        console.log(dropdown.space);
-
-        $.getJSON("{{ url_for('reserve._get_spaces') }}", send, function(data) {
-            console.log("appending");
-            dropdown.space.append(
-                $('<option>', {
-                    selected: "1",
-                    value: "0",
-                    text: "---"
-                })
-            );
-            data.forEach(function(item) {
-              console.log("adding element");
-
-                dropdown.space.append(
-                    $('<option>', {
-                        value: item[0],
-                        text: item[1]
-                    })
-                );
-            });
-            console.log(dropdown.space);
-            dropdown.space.removeAttr('disabled');
-
-            dropdown.space.hide().fadeIn('fast');
-        });
-    }
-
-    // event listener to state dropdown change
-    dropdown.location.on('change', function() {
-        updateSpaces();
-    });
-
-});*/
 
 </script>
 {% endblock %}

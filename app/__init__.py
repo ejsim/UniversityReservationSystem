@@ -7,7 +7,7 @@ from flask_assets import Environment
 from flask_wtf import CsrfProtect
 from flask_compress import Compress
 from flask_rq import RQ
-import flask_restless
+from flask_restless import APIManager
 from config import config
 from .assets import app_css, app_js, vendor_css, vendor_js
 
@@ -39,6 +39,9 @@ def create_app(config_name):
     csrf.init_app(app)
     compress.init_app(app)
     RQ(app)
+
+    #manager = APIManager(app, flask_sqlalchemy_db=db)
+    #create_api(manager)
 
 
     # Register Jinja template functions
