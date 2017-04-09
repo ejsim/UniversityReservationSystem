@@ -1,14 +1,14 @@
 from flask_wtf import Form
 from wtforms import ValidationError
 from wtforms.ext.sqlalchemy.fields import QuerySelectMultipleField, QuerySelectField
-from wtforms.fields import PasswordField, StringField, SubmitField, DateField, DateTimeField, IntegerField
+from wtforms.fields import PasswordField, StringField, SubmitField, DateField, DateTimeField, IntegerField, HiddenField
 from wtforms.fields.html5 import EmailField
 from wtforms.validators import Email, EqualTo, InputRequired, Length, NumberRange, Optional
 
 from .. import db
 from ..models import *
 
-class ReserveSpaceForm(Form):
+class SearchSpaceForm(Form):
     campus = QuerySelectField(
         'Campus*',
         get_label='name',
@@ -34,3 +34,10 @@ class ReserveSpaceForm(Form):
     end_time = DateTimeField(
         'End Time*', format='%B %d, %Y %I:%M %p')
     search = SubmitField('Search')
+
+class ReserveSpaceForm(Form):
+    start_time = HiddenField('Start Time')
+    end_time = HiddenField('End Time')
+    space_id = HiddenField('Space ID')
+    event_name = StringField('Event Name', [InputRequired(), Length(min=1)])
+    reserve = SubmitField('Reserve')

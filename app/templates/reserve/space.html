@@ -1,118 +1,160 @@
-{% extends 'layouts/base.html' %}
-{% import 'macros/form_macros.html' as f %}
+{% extends 'layouts/base.html' %} {% import 'macros/form_macros.html' as f %} {% block scripts %} {% endblock %} {% block content %}
 
-{% block scripts %}
-{% endblock %}
+<div class="ui grid container">
+    <div class="six wide computer sixteen wide mobile column">
+        <h2 class="ui dividing header">Search for a Space</h2> {% set flashes = { 'error': get_flashed_messages(category_filter=['form-error']), 'warning': get_flashed_messages(category_filter=['form-check-email']), 'info': get_flashed_messages(category_filter=['form-info']), 'success': get_flashed_messages(category_filter=['form-success'])
+        } %} {{ f.begin_form(search_form, flashes) }}
+        <div class="two fields">
+            {{ f.render_form_field(search_form.campus) }} {{ f.render_form_field(search_form.space_type) }}
+        </div>
 
-{% block content %}
+        <div class="two fields">
+            <div class="field">
+                <label>Start Time*</label>
+                <div class="ui calendar" id="rangestart">
+                    <div class="ui input left icon">
+                        <i class="calendar icon"></i>
+                        <input id="start_time" type="text" name="start_time" placeholder="Start">
+                    </div>
+                </div>
+                {% if search_form.start_time.errors %}
+                <div class="ui red pointing label">
+                    {{ search_form.start_time.errors[0] | safe }}
+                </div>
+                {% endif %}
 
-    <div class="ui grid container">
-        <div class="eight wide computer sixteen wide mobile column">
-            <h2 class="ui dividing header">Reserve a Space</h2>
-
-            {% set flashes = {
-                'error':   get_flashed_messages(category_filter=['form-error']),
-                'warning': get_flashed_messages(category_filter=['form-check-email']),
-                'info':    get_flashed_messages(category_filter=['form-info']),
-                'success': get_flashed_messages(category_filter=['form-success'])
-            } %}
-
-            {{ f.begin_form(form, flashes) }}
-            <div class="two fields">
-            {{ f.render_form_field(form.campus) }}
-            {{ f.render_form_field(form.space_type) }}
             </div>
-
-            <div class="two fields">
-                 <div class="field">
-                   <label>Start Time*</label>
-                   <div class="ui calendar" id="rangestart">
-                     <div class="ui input left icon">
-                       <i class="calendar icon"></i>
-                       <input id="start_time" type="text" name="start_time" placeholder="Start">
-                     </div>
-                   </div>
-                   {% if form.start_time.errors %}
-                   <div class="ui red pointing label">
-                       {{ form.start_time.errors[0] | safe }}
-                   </div>
-                   {% endif %}
-
-                 </div>
-                 <div class="field">
-                   <label>End Time*</label>
-                   <div class="ui calendar" id="rangeend">
-                     <div class="ui input left icon">
-                       <i class="calendar icon"></i>
-                       <input id="start_time" type="text" name="end_time" placeholder="End">
-                     </div>
-                   </div>
-                 </div>
+            <div class="field">
+                <label>End Time*</label>
+                <div class="ui calendar" id="rangeend">
+                    <div class="ui input left icon">
+                        <i class="calendar icon"></i>
+                        <input id="start_time" type="text" name="end_time" placeholder="End">
+                    </div>
+                </div>
             </div>
-            <div class="two fields">
-            {{ f.render_form_field(form.capacity) }}
-            {{ f.render_form_field(form.ammenities) }}
+        </div>
+        <div class="two fields">
+            {{ f.render_form_field(search_form.capacity) }} {{ f.render_form_field(search_form.ammenities) }}
+        </div>
+
+        {{ f.form_message(flashes['error'], header='Something went wrong.', class='error') }} {{ f.form_message(flashes['warning'], header='Hm.', class='warning') }} {{ f.form_message(flashes['info'], header='Information', class='info') }} {{ f.form_message(flashes['success'],
+        header='Success!', class='success') }} {% for field in search_form | selectattr('type', 'equalto', 'SubmitField') %} {{ f.render_form_field(field) }} {% endfor %} {{ f.end_form(search_form) }}
+    </div>
+    <br>
+    {% if available_spaces %}
+    {% if available_spaces|length > 0 %}
+    <div class="ten wide computer sixteen wide mobile column centered">
+        <!--<div style="overflow-x: scroll;">-->
+        <h2 class="ui dividing header">Available Spaces</h2>
+        <div class="ui three cards">
+            {% for space in available_spaces %}
+            <div class="card">
+                <div class="content">
+                    <div class="header">
+                        {{ space['location_name'] }} {{ space['name'] }}
+                    </div>
+                    <div class="description">
+                        Capacity: {{ space['capacity'] }}<br> Condition: {{ space['condition'] }}
+                    </div>
+                </div>
+                <div class="extra content">
+                    <div class="ui two buttons">
+                        <div class="ui green button show-modal" data-space-name="{{ space['location_name'] }} {{ space['name'] }}" data-space-type="{{ search_form.space_type.data.name }}" data-campus-name="{{ search_form.campus.data.name }}" data-capacity="{{ search_form.capacity.data }}" data-space-id="{{ space['id'] }}">Reserve</div>
+                        <div class="ui blue button">View</div>
+                    </div>
+                </div>
             </div>
-
-            {{ f.form_message(flashes['error'], header='Something went wrong.', class='error') }}
-            {{ f.form_message(flashes['warning'], header='Hm.', class='warning') }}
-            {{ f.form_message(flashes['info'], header='Information', class='info') }}
-            {{ f.form_message(flashes['success'], header='Success!', class='success') }}
-
-            {% for field in form | selectattr('type', 'equalto', 'SubmitField') %}
-                {{ f.render_form_field(field) }}
             {% endfor %}
 
-            {{ f.end_form(form) }}
-          <!--</div> -->
-          <br>
-          {% if available_spaces %}
-          {% if available_spaces|length > 0 %}
-            {# <div class="eight wide computer sixteen wide mobile column centered"> #}
-            <div style="overflow-x: scroll;">
-                <table class="ui searchable sortable unstackable selectable celled table">
-                    <thead>
-                        <tr>
-                            <th>Location</th>
-                            <th class="sorted ascending">Space</th>
-                            <th>Capacity</th>
-                            <th>Condition</th>
-                        </tr>
-                    </thead>
-
-                    <tbody>
-
-                    {% for space in available_spaces %}
-                        <tr onclick="window.location.href = '{{ url_for('reserve.space') }}';">
-                            <td>{{ space['location_name'] }}</td>
-                            <td>{{ space['name'] }}</td>
-                            <td>{{ space['capacity'] }}</td>
-                            <td>{{ space['condition'] }}</td>
-                        </tr>
-                    {% endfor %}
-                    </tbody>
-
-                </table>
-            </div>
-
         </div>
-        {% endif %}
-        {% else %}
-        <h2> No spaces found. </h2>
-        {% endif %}
     </div>
-    <!-- THESE SCRIPT TAGS NECESSARY FOR CALENDAR POP-UPS -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.4/semantic.min.js"></script>
-    <script src="https://cdn.rawgit.com/mdehoog/Semantic-UI-Calendar/76959c6f7d33a527b49be76789e984a0a407350b/dist/calendar.min.js"></script>
 
-    <script type="text/javascript">
+</div>
+{% else %}
+<h2> No spaces found. </h2> {% endif %}
 
-      $('#rangestart').calendar({
+</div>
+<div class="ui modal small" id="reserve-space-modal">
+    <i class="close icon"></i>
+    <div class="ui header">Reserve A Space</div>
+    <div class="content">
+        <div class="ui two column centered grid container">
+            <div class="five wide computer sixteen wide mobile column centered">
+            {{ f.begin_form(reserve_form, flashes, id="reserveform") }}
+                <div class="field">
+                  <label for="event_name">Event Name</label>
+                  <input id="event_name" name="event_name" placeholder="Event Name" type="text">
+                </div>
+              {{ f.end_form(reserve_form) }}
+                <div class="ui list">
+                    <div class="item">
+                        <div class="header">{{ search_form.start_time.data.strftime('%B %-d, %Y %-I:%M %p') }}</div>
+                    </div>
+                    <div class="item">to</div>
+                    <div class="item">
+                        <div class="header">{{ search_form.end_time.data.strftime('%B %-d, %Y %-I:%M %p') }}</div>
+                    </div>
+                </div>
+            </div>
+            <div class="five wide computer sixteen wide mobile column centered">
+                <div class="ui list">
+                    <div class="item">
+                        <div class="header" id="space-name">Halligan Hall 202</div>
+                    </div>
+                    <div class="item">
+                        <div class="header" id="campus-name">Medford/Somerville</div>
+                    </div>
+                    <div class="item" id="space-type">Classroom</div>
+                    <div class="item" id="capacity">Capacity: 10</div>
+                    <div class="item" id="ammenities">Ammenities: None</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="actions">
+        <div class="ui black deny button">
+            Cancel
+        </div>
+        <input type="submit" value="Reserve" id="submit" form="reserveform" class="ui positive right labeled icon button">
+        </div>
+    </div>
+</div>
+{% endif %}
+
+<!-- THESE SCRIPT TAGS NECESSARY FOR CALENDAR POP-UPS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.4/semantic.min.js"></script>
+<script src="https://cdn.rawgit.com/mdehoog/Semantic-UI-Calendar/76959c6f7d33a527b49be76789e984a0a407350b/dist/calendar.min.js"></script>
+
+<script type="text/javascript">
+    $('#rangestart').calendar({
         endCalendar: $('#rangeend')
-      });
-      $('#rangeend').calendar({
+    });
+    $('#rangeend').calendar({
         startCalendar: $('#rangestart')
-      });
+    });
 
+    var modal = $('#reserve-space-modal') // hold reference to modal
+    spaceName = $('#space-name'),
+    spaceType = $('#space-type'),
+    campusName = $('#campus-name')
+    capacity = $('#capacity'),
+    ammenities = $('#ammenities');
+    spaceID = $('#space_id');
+
+    //give your button an easier class reference
+    $('.show-modal').on('click', function() {
+        var button = $(this);
+        spaceName.text(button.data('space-name'));
+        spaceType.text(button.data('space-type'));
+        campusName.text(button.data('campus-name'));
+        capacity.text("Capacity: " + button.data('capacity'));
+        console.log("Space ID Data:");
+        console.log(button.data('space-id'));
+        document.getElementById("space_id").value = button.data('space-id');
+        console.log(document.getElementById("space_id").value);
+        modal.modal('show');
+    });
 </script>
 {% endblock %}

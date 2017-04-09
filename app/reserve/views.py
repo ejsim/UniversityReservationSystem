@@ -2,6 +2,7 @@ from flask import abort, flash, redirect, render_template, url_for, request, jso
 from flask_login import current_user, login_required
 from flask_rq import get_queue
 from sqlalchemy import *
+import datetime
 from . import reserve
 from .. import db
 from ..models import *
@@ -29,17 +30,23 @@ def make_sql(campus, space_type, start_time, end_time, capacity=None, ammenities
 @reserve.route('/space', methods=['GET', 'POST'])
 @login_required
 def space():
-    form = ReserveSpaceForm()
-
-    if form.is_submitted():
-        if not form.validate():
-            return render_template('reserve/space.html', form=form)
-        sql = make_sql(str(form.campus.data.id), str(form.space_type.data.id), str(form.start_time.data), str(form.end_time.data), form.capacity.data, form.ammenities.data)
-        print(form.ammenities.data, file=sys.stderr)
+    search_form = SearchSpaceForm()
+    reserve_form = ReserveSpaceForm()
+    if reserve_form.validate_on_submit():
+        sr = Space_Reservation(event_name=reserve_form.event_name.data, space_id=reserve_form.space_id.data, reserver_id=current_user.id, start_time=datetime.datetime.strptime(reserve_form.start_time.data, "%B %d, %Y %I:%M %p").date(), end_time=datetime.datetime.strptime(reserve_form.end_time.data, "%B %d, %Y %I:%M %p").date(), created_by=current_user.id, last_updated_by=current_user.id)
+        db.session.add(sr)
+        db.session.commit()
+        print("Reservation Added", file=sys.stderr)
+        return redirect(url_for('account.manage'))
+    if search_form.is_submitted():
+        if not search_form.validate():
+            return render_template('reserve/space.html', search_form=search_form, reserve_form=reserve_form)
+        sql = make_sql(str(search_form.campus.data.id), str(search_form.space_type.data.id), str(search_form.start_time.data), str(search_form.end_time.data), search_form.capacity.data, search_form.ammenities.data)
+        print(search_form.ammenities.data, file=sys.stderr)
         response = db.engine.execute(sql)
         available_spaces = []
         for space in response:
             available_spaces.append(dict(zip(space.keys(), space)))
         #print(available_spaces, file=sys.stderr)
-        return render_template('reserve/space.html', form=form, available_spaces=available_spaces)
-    return render_template('reserve/space.html', form=form)
+        return render_template('reserve/space.html', search_form=search_form, reserve_form=reserve_form, available_spaces=available_spaces)
+    return render_template('reserve/space.html', search_form=search_form, reserve_form=reserve_form)
