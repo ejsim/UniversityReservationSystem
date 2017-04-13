@@ -8,6 +8,7 @@ from flask_script import Manager, Shell
 from redis import Redis
 from rq import Connection, Queue, Worker
 import flask_restless
+import flask_sqlalchemy
 from app import create_app, db
 from app.models import *
 
@@ -23,6 +24,7 @@ def make_shell_context():
 
 manager.add_command('shell', Shell(make_context=make_shell_context))
 manager.add_command('db', MigrateCommand)
+
 
 
 @manager.command
@@ -149,6 +151,20 @@ def add_test_data():
 
 
 
+flask_manager = flask_restless.APIManager(app, flask_sqlalchemy_db=db)
+
+flask_manager.create_api(Ammenity_Type, methods=['GET'])
+flask_manager.create_api(Campus, methods=['GET'])
+flask_manager.create_api(Department, methods=['GET'])
+flask_manager.create_api(Equipment, methods=['GET'])
+flask_manager.create_api(Equipment_Reservation, methods=['GET'])
+flask_manager.create_api(Equipment_Type, methods=['GET'])
+flask_manager.create_api(Role, methods=['GET'])
+flask_manager.create_api(Space_Ammenity, methods=['GET'])
+flask_manager.create_api(Space_Reservation, methods=['GET'])
+flask_manager.create_api(Space_Type, methods=['GET'])
+flask_manager.create_api(Space, methods=['GET'])
+flask_manager.create_api(User, methods=['GET'])
 
 @manager.option(
     '-n',

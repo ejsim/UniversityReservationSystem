@@ -2,6 +2,7 @@ from .. import db
 import datetime
 import enum
 from sqlalchemy import UniqueConstraint
+import flask_restless
 
 class Campus(db.Model):
     __tablename__ = 'campuses'

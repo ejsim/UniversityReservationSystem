@@ -8,6 +8,11 @@ from .. import db
 from ..models import *
 from .forms import *
 import sys
+import json
+
+def datetimeconverter(o):
+    if isinstance(o, datetime.datetime):
+        return o.__str__()
 
 def make_sql(campus, space_type, start_time, end_time, capacity=None, ammenities=None):
     sql = """SELECT s.*, l.name AS location_name, CONCAT(l.name, ' ', s.name) AS full_name, c.name AS campus_name
@@ -44,9 +49,11 @@ def space():
         sql = make_sql(str(search_form.campus.data.id), str(search_form.space_type.data.id), str(search_form.start_time.data), str(search_form.end_time.data), search_form.capacity.data, search_form.ammenities.data)
         print(search_form.ammenities.data, file=sys.stderr)
         response = db.engine.execute(sql)
+        print("THIS IS A THING", file=sys.stderr)
+        print(response, file=sys.stderr)
         available_spaces = []
         for space in response:
             available_spaces.append(dict(zip(space.keys(), space)))
-        #print(available_spaces, file=sys.stderr)
+        print(json.dumps(available_spaces, default = datetimeconverter), file=sys.stderr)
         return render_template('reserve/space.html', search_form=search_form, reserve_form=reserve_form, available_spaces=available_spaces)
     return render_template('reserve/space.html', search_form=search_form, reserve_form=reserve_form)
