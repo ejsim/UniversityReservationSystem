@@ -1,10 +1,5 @@
-import flask_restless
-import sys
-from .. import app, db
-from .. models import *
+from flask import Blueprint
 
-print("Init api", file=sys.stderr)
+api = Blueprint('api', __name__)
 
-
-manager = flask_restless.APIManager(app, flask_sqlalchemy_db=db)
-manager.create_api(Location, methods=['GET', 'POST', 'DELETE'])
+from . import views, errors  # noqa
