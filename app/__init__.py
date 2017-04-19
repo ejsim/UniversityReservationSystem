@@ -23,7 +23,6 @@ login_manager = LoginManager()
 login_manager.session_protection = 'strong'
 login_manager.login_view = 'account.login'
 
-
 def create_app(config_name):
     app = Flask(__name__)
     app.config.from_object(config[config_name])
@@ -36,13 +35,27 @@ def create_app(config_name):
     mail.init_app(app)
     db.init_app(app)
     login_manager.init_app(app)
-    csrf.init_app(app)
+    #csrf.init_app(app)
     compress.init_app(app)
     RQ(app)
 
-    #manager = APIManager(app, flask_sqlalchemy_db=db)
-    #create_api(manager)
 
+
+    with app.app_context():
+        from .models import User, Role, Campus, Location, Department, Equipment_Type, Condition, Equipment, Equipment_Reservation, Space_Type, Space, Ammenity_Type, Space_Ammenity, Space_Reservation
+        flask_manager = APIManager(app, flask_sqlalchemy_db=db)
+        flask_manager.create_api(User, methods=['GET', 'POST'])
+        flask_manager.create_api(Ammenity_Type, methods=['GET'])
+        flask_manager.create_api(Campus, methods=['GET'])
+        flask_manager.create_api(Department, methods=['GET'])
+        flask_manager.create_api(Equipment, methods=['GET'])
+        flask_manager.create_api(Equipment_Reservation, methods=['GET'])
+        flask_manager.create_api(Equipment_Type, methods=['GET'])
+        flask_manager.create_api(Role, methods=['GET'])
+        flask_manager.create_api(Space_Ammenity, methods=['GET'])
+        flask_manager.create_api(Space_Reservation, methods=['GET'])
+        flask_manager.create_api(Space_Type, methods=['GET'])
+        flask_manager.create_api(Space, methods=['GET', 'POST'])
 
     # Register Jinja template functions
     from .utils import register_template_utils

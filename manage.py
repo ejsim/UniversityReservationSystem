@@ -149,23 +149,6 @@ def add_test_data():
     db.session.add_all([space_ammenity1, space_ammenity2, space_ammenity3, space_ammenity4, space_ammenity5, space_ammenity6, space_ammenity7, space_ammenity8, space_ammenity9, space_ammenity10, space_ammenity11, space_ammenity12])
     db.session.commit()
 
-
-
-flask_manager = flask_restless.APIManager(app, flask_sqlalchemy_db=db)
-
-flask_manager.create_api(Ammenity_Type, methods=['GET'])
-flask_manager.create_api(Campus, methods=['GET'])
-flask_manager.create_api(Department, methods=['GET'])
-flask_manager.create_api(Equipment, methods=['GET'])
-flask_manager.create_api(Equipment_Reservation, methods=['GET'])
-flask_manager.create_api(Equipment_Type, methods=['GET'])
-flask_manager.create_api(Role, methods=['GET'])
-flask_manager.create_api(Space_Ammenity, methods=['GET'])
-flask_manager.create_api(Space_Reservation, methods=['GET'])
-flask_manager.create_api(Space_Type, methods=['GET'])
-flask_manager.create_api(Space, methods=['GET'])
-flask_manager.create_api(User, methods=['GET'])
-
 @manager.option(
     '-n',
     '--number-users',
