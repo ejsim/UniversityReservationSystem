@@ -35,7 +35,6 @@ the mailing environment variables can be set as the following. We recommend usin
 ```
 MAIL_USERNAME=SendgridUsername
 MAIL_PASSWORD=SendgridPassword
-SECRET_KEY=SuperRandomStringToBeUsedForEncryption
 ```
 
 Other Key value pairs:
