@@ -8,7 +8,6 @@ An application that allows the creation of room reservations based on desired at
 
 ```
 $ git clone git@github.com:tuftsdev/comp120-s2017-team7.git
-$ git checkout dev-flask
 ```
 
 ##### Initialize a virtualenv
