@@ -2,12 +2,100 @@
 
 {% block content %}
 
-
 <div class="ui grid container">
     <div class="eight wide computer sixteen wide mobile column centered">
-        <h1>API</h1>
-        <h2>To be continued...</h2>
-      </div>
+        <h1>University Reservation System API</h1>
+        <p>The University Reservation System is an online tool that helps you reserve spaces and equipment at your university. It gives you all the information you need about the thing you are reserving, such as condition, amenities, and more, to ensure that you get exactly what you are looking for.  </p>
+        <p>This API is for anyone who is interested in the space and equipment data we have. This documentation will teach you how to get data regarding the current spaces, equipment, and reservations at your university and also how to add new spaces and equipment for others to use.</p>
+        <h2>Receiving Data</h2>
+        <p>In this section, you will learn how to perform basic querying operations to get the information we have in our database.</p>
+        <h3>GET /api/spaces</h3>
+        <p>Returns a list of spaces in the database. </p>
+        <h4>Example</h4>
+        <h5>Request</h5>
+        <p><code>https://maxgreenwald.me/api/spaces</code></p>
+        <h5>Response</h5>
+        <pre><code>{
+  "num_results": 2, 
+  "objects": [
+  {
+    "capacity": 15, 
+    "condition": null, 
+    "created_by": null, 
+    "date_created": "2017-04-10T02:07:36.149514", 
+    "id": 1, 
+    "last_updated": "2017-04-10T02:07:36.149520", 
+    "last_updated_by": null, 
+    "location_id": 1, 
+    "name": "102", 
+    "space_type_id": 8
+  }, 
+  {
+    "capacity": 15, 
+    "condition": null, 
+    "created_by": null, 
+    "date_created": "2017-04-10T02:07:36.150924", 
+    "id": 2, 
+    "last_updated": "2017-04-10T02:07:36.150928", 
+    "last_updated_by": null, 
+    "location_id": 1, 
+    "name": "211", 
+    "space_type_id": 8
+  }
+  ], 
+  "page": 1, 
+  "total_pages": 1
+}</code></pre>
+
+
+
+        <h3>GET /api/spaces/&lt;id&gt;</h3>
+        <p>Returns a specific spaces in the database with the given id number. </p>
+        <h4>Example</h4>
+        <h5>Request</h5>
+        <p><code>https://maxgreenwald.me/api/spaces/1</code></p>
+        <h5>Response</h5>
+        <pre><code>{
+  "capacity": 15, 
+  "condition": null, 
+  "created_by": null, 
+  "date_created": "2017-04-10T02:07:36.149514", 
+  "id": 1, 
+  "last_updated": "2017-04-10T02:07:36.149520", 
+  "last_updated_by": null, 
+  "location_id": 1, 
+  "name": "102", 
+  "space_type_id": 8
+}</code></pre>
+
+
+
+        
+        <h2>Sending Data</h2>
+        <p>In this section, you will learn how to perform operations used to send information to our database.</p>
+        <h3>POST /api/spaces</h3>
+        <p>Adds a new space to the database. </p>
+        <h4>Example</h4>
+        <h5>Request</h5>
+        <p><code>curl -H "Content-Type: application/json" -X POST -d '{"capacity":20,"name":"A room"}' https://maxgreenwald.me/api/spaces</code></p>
+        <h5>Response</h5>
+        <pre><code>{
+  "capacity": 20, 
+  "condition": null, 
+  "created_by": null, 
+  "date_created": "2017-04-20T02:55:34.091498", 
+  "id": 23, 
+  "last_updated": "2017-04-20T02:55:34.091509", 
+  "last_updated_by": null, 
+  "location_id": null, 
+  "name": "A room", 
+  "space_type_id": null
+}</code></pre>
+
+
+
+           
+        
     </div>
 
 

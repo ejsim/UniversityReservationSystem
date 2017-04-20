@@ -10,7 +10,3 @@ from . import views, errors  # noqa
 
 
 print("Creating API")
-
-'''
-
-'''
