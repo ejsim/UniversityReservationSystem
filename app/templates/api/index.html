@@ -70,7 +70,141 @@
 
 
 
+
+
+        <h3>GET /api/campuses</h3>
+        <p>Returns a list of campuses in the database. </p>
+        <h4>Example</h4>
+        <h5>Request</h5>
+        <p><code>https://maxgreenwald.me/api/campuses</code></p>
+        <h5>Response</h5>
+        <pre><code>{
+  "num_results": 2, 
+  "objects": [
+    {
+      "city": "Medford", 
+      "created_by": null, 
+      "date_created": "2017-04-10T02:07:36.124219", 
+      "id": 1, 
+      "last_updated": "2017-04-10T02:07:36.124227", 
+      "last_updated_by": null, 
+      "name": "Tufts Medford/Somerville", 
+      "state": "MA"
+    }, 
+    {
+      "city": "Grafton", 
+      "created_by": null, 
+      "date_created": "2017-04-10T02:07:36.125580", 
+      "id": 2, 
+      "last_updated": "2017-04-10T02:07:36.125584", 
+      "last_updated_by": null, 
+      "name": "Tufts Grafton", 
+      "state": "MA"
+    }
+  ], 
+  "page": 1, 
+  "total_pages": 1
+}</code></pre>
+
+
+
+        <h3>GET /api/campuses/&lt;id&gt;</h3>
+        <p>Returns a specific campus in the database with the given id number. </p>
+        <h4>Example</h4>
+        <h5>Request</h5>
+        <p><code>https://maxgreenwald.me/api/campuses/1</code></p>
+        <h5>Response</h5>
+        <pre><code>{
+  "city": "Medford", 
+  "created_by": null, 
+  "date_created": "2017-04-10T02:07:36.124219", 
+  "id": 1, 
+  "last_updated": "2017-04-10T02:07:36.124227", 
+  "last_updated_by": null, 
+  "name": "Tufts Medford/Somerville", 
+  "state": "MA"
+}</code></pre>
+
+
+
+
+
+        <h3>GET /api/locations</h3>
+        <p>Returns a list of locations/buildings in the database. </p>
+        <h4>Example</h4>
+        <h5>Request</h5>
+        <p><code>https://maxgreenwald.me/api/locations</code></p>
+        <h5>Response</h5>
+        <pre><code>{
+  "num_results": 2, 
+  "objects": [
+    {
+      "address_line_1": "161 College Ave", 
+      "address_line_2": null, 
+      "address_line_3": null, 
+      "campus_id": 1, 
+      "city": "Medford", 
+      "created_by": null, 
+      "date_created": "2017-04-10T02:07:36.142521", 
+      "id": 1, 
+      "last_updated": "2017-04-10T02:07:36.142528", 
+      "last_updated_by": null, 
+      "name": "Halligan Hall", 
+      "state": "MA", 
+      "zip_code": "02144"
+    }, 
+    {
+      "address_line_1": "35 Professors Row", 
+      "address_line_2": null, 
+      "address_line_3": null, 
+      "campus_id": 1, 
+      "city": "Medford", 
+      "created_by": null, 
+      "date_created": "2017-04-10T02:07:36.144008", 
+      "id": 2, 
+      "last_updated": "2017-04-10T02:07:36.144013", 
+      "last_updated_by": null, 
+      "name": "Tisch Library", 
+      "state": "MA", 
+      "zip_code": "02144"
+    }
+  ], 
+  "page": 1, 
+  "total_pages": 1
+}</code></pre>
+
+
+
+        <h3>GET /api/locations/&lt;id&gt;</h3>
+        <p>Returns a specific location/building in the database with the given id number. </p>
+        <h4>Example</h4>
+        <h5>Request</h5>
+        <p><code>https://maxgreenwald.me/api/locations/2</code></p>
+        <h5>Response</h5>
+        <pre><code>{
+  "address_line_1": "35 Professors Row", 
+  "address_line_2": null, 
+  "address_line_3": null, 
+  "campus_id": 1, 
+  "city": "Medford", 
+  "created_by": null, 
+  "date_created": "2017-04-10T02:07:36.144008", 
+  "id": 2, 
+  "last_updated": "2017-04-10T02:07:36.144013", 
+  "last_updated_by": null, 
+  "name": "Tisch Library", 
+  "state": "MA", 
+  "zip_code": "02144"
+}</code></pre>
         
+
+
+
+
+
+
+
+
         <h2>Sending Data</h2>
         <p>In this section, you will learn how to perform operations used to send information to our database.</p>
         <h3>POST /api/spaces</h3>
