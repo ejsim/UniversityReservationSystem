@@ -24,10 +24,10 @@ Run the following commands to initialize your virtualenv;
 $ python3 -m venv ./venv
 $ source ./venv/bin/activate
 ```
-
+<!--
 ##### Add Environment Variables 
 
-Not sure yet if this section is true or not...Ask Max
+This should be all implemented so this environment variable section can be ignored. Not going to delete
 
 Create a file called `config.env` that contains environment variables in the following syntax: `ENVIRONMENT_VARIABLE=value`. For example,
 the mailing environment variables can be set as the following. We recommend using Sendgrid for a mailing SMTP server. But anything else will work as well.
@@ -48,6 +48,8 @@ Other Key value pairs:
 
 
 **Note: do not include the `config.env` file in any commits. This should remain private.**
+
+-->
 
 ##### Install the dependencies
 
@@ -125,7 +127,7 @@ $ python manage.py setup_dev
 
 Note that this will create an admin user with email and password specified by the `ADMIN_EMAIL` and `ADMIN_PASSWORD` config variables. If not specified, they are both `flask-base-admin@example.com` and `password` respectively.
 
-##### [Optional] Add fake data to the database
+##### Add the space data to the database
 
 ```
 $ python manage.py add_test_data
@@ -141,4 +143,25 @@ $ honcho start -f Local
 For Windows users having issues with binding to a redis port locally, refer to [this issue](https://github.com/hack4impact/flask-base/issues/132).
 
 The default port of this application is http://127.0.0.1:5000/
+
+
+## Code for quick run without explanation;
+
+```
+$ git clone git@github.com:tuftsdev/comp120-s2017-team7.git
+$ python3 -m venv ./venv
+$ source ./venv/bin/activate
+$ pip3 install -r requirements.txt
+$ pg_ctl -D /usr/local/var/postgres -l /usr/local/var/postgres/server.log start
+$ psql
+$ create database urs_flask;
+$ python manage.py recreate_db
+$ python manage.py setup_dev
+$ python manage.py add_test_data
+$ source env/bin/activate
+$ honcho start -f Local
+```
+
+
+
 
