@@ -58,12 +58,7 @@
                         Capacity: {{ space['capacity'] }}<br> Condition: {{ space['condition'] }}
                     </div>
                 </div>
-                <div class="extra content">
-                    <div class="ui two buttons">
-                        <div class="ui green button show-modal" data-space-name="{{ space['location_name'] }} {{ space['name'] }}" data-space-type="{{ search_form.space_type.data.name }}" data-campus-name="{{ search_form.campus.data.name }}" data-capacity="{{ search_form.capacity.data }}" data-space-id="{{ space['id'] }}">Reserve</div>
-                        <div class="ui blue button">View</div>
-                    </div>
-                </div>
+                    <div class="ui green bottom attached button show-modal" data-space-name="{{ space['location_name'] }} {{ space['name'] }}" data-space-type="{{ search_form.space_type.data.name }}" data-campus-name="{{ search_form.campus.data.name }}" data-capacity="{{ search_form.capacity.data }}" data-space-id="{{ space['id'] }}">Reserve</div>
             </div>
             {% endfor %}
 

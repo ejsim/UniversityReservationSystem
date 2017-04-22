@@ -2,11 +2,11 @@ from flask import flash, redirect, render_template, request, url_for
 from flask_login import (current_user, login_required, login_user,
                          logout_user)
 from flask_rq import get_queue
-
+from sqlalchemy import *
 from . import account
 from .. import db
 from ..email import send_email
-from ..models import User
+from ..models import *
 from .forms import (ChangeEmailForm, ChangePasswordForm, CreatePasswordForm,
                     LoginForm, RegistrationForm, RequestResetPasswordForm,
                     ResetPasswordForm)
@@ -18,7 +18,7 @@ def login():
     form = LoginForm()
     if form.validate_on_submit():
         user = User.query.filter_by(email=form.email.data).first()
-        
+
         if user is not None and user.password_hash is not None and \
                 user.verify_password(form.password.data):
             login_user(user, form.remember_me.data)
@@ -69,7 +69,26 @@ def logout():
 @login_required
 def manage():
     """Display a user's account information."""
-    return render_template('account/manage.html', user=current_user, form=None)
+
+    space_sql = '''SELECT sr.*, s.name AS space_name, l.name AS location_name, c.name AS campus_name
+    FROM space_reservations sr
+    JOIN spaces s ON s.id=sr.space_id
+    JOIN locations l ON s.location_id = l.id
+    JOIN campuses c ON l.campus_id = c.id
+    WHERE sr.reserver_id=''' + str(current_user.id) + ";"
+
+    space_reservations = db.engine.execute(text(space_sql))
+
+    equipment_sql = '''SELECT er.*, e.name AS equipment_name, l.name AS location_name, c.name AS campus_name
+    FROM equipment_reservations er
+    JOIN equipment e ON e.id=er.equipment_id
+    JOIN locations l ON e.location_id = l.id
+    JOIN campuses c ON l.campus_id = c.id
+    WHERE er.reserver_id=''' + str(current_user.id) + ";"
+
+    equipment_reservations = db.engine.execute(text(equipment_sql))
+
+    return render_template('account/manage.html', user=current_user, space_reservations=space_reservations, equipment_reservations=equipment_reservations, form=None)
 
 
 @account.route('/reset-password', methods=['GET', 'POST'])

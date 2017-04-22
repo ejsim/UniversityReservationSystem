@@ -26,6 +26,44 @@
         <tr><td>Email address</td><td>{{ user.email }}</td></tr>
         <tr><td>Account type</td><td>{{ user.role.name }}</td></tr>
     </table>
+
+    <h2 class="ui header">My Space Reservations</h2>
+    <div class="ui divided items">
+    {% for sr in space_reservations %}
+      <div class="item">
+          <div class="content">
+            <div class="header">{{ sr.event_name }}</div>
+            <div class="meta">
+              <span class="space">{{ sr.space_name }}</span>
+              <span class="location">{{ sr.location_name }}</span><br>
+              <span class="campus">{{ sr.campus_name }}</span>
+            </div>
+            <div class="description">
+              <p>{{ sr.start_time.strftime('%-m/%-d/%y %-I:%M %p') }} - {{ sr.end_time.strftime('%-m/%-d/%y %-I:%M %p') }}</p>
+            </div>
+          </div>
+        </div>
+    {% endfor %}
+    </div>
+
+
+    <h2 class="ui header">My Equipment Reservations</h2>
+    <div class="ui divided items">
+    {% for er in equipment_reservations %}
+      <div class="item">
+          <div class="content">
+            <div class="header">{{ er.equipment_name }}</div>
+            <div class="meta">
+              <span class="location">{{ er.location_name }}</span><br>
+              <span class="campus">{{ er.campus_name }}</span>
+            </div>
+            <div class="description">
+              <p>{{ er.start_time.strftime('%-m/%-d/%y %-I:%M %p') }} - {{ er.end_time.strftime('%-m/%-d/%y %-I:%M %p') }}</p>
+            </div>
+          </div>
+        </div>
+    {% endfor %}
+  </div>
 {% endmacro %}
 
 {% block content %}
