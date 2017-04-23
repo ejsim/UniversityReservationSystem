@@ -2,7 +2,7 @@ from flask import url_for
 from flask_wtf import Form
 from wtforms import ValidationError
 from wtforms.fields import (BooleanField, PasswordField, StringField,
-                            SubmitField)
+                            SubmitField, HiddenField)
 from wtforms.fields.html5 import EmailField
 from wtforms.validators import Email, EqualTo, InputRequired, Length
 
@@ -16,6 +16,10 @@ class LoginForm(Form):
     remember_me = BooleanField('Keep me logged in')
     submit = SubmitField('Log in')
 
+class CancelReservationForm(Form):
+    id = StringField('Space ID')
+    type = StringField('Reservation Type')
+    cancel = SubmitField('Cancel')
 
 class RegistrationForm(Form):
     first_name = StringField(

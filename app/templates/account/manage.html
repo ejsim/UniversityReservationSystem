@@ -27,43 +27,75 @@
         <tr><td>Account type</td><td>{{ user.role.name }}</td></tr>
     </table>
 
+    {% set flashes = { 'error': get_flashed_messages(category_filter=['form-error']), 'warning': get_flashed_messages(category_filter=['form-check-email']), 'info': get_flashed_messages(category_filter=['form-info']), 'success': get_flashed_messages(category_filter=['form-success'])
+    } %}
     <h2 class="ui header">My Space Reservations</h2>
-    <div class="ui divided items">
+
+      {% if space_reservations|length == 0 %}
+        <h4 class="ui header">No space reservations.</h4>
+      {% endif %}
+      <div class="ui divided items">
     {% for sr in space_reservations %}
+
       <div class="item">
-          <div class="content">
-            <div class="header">{{ sr.event_name }}</div>
-            <div class="meta">
-              <span class="space">{{ sr.space_name }}</span>
-              <span class="location">{{ sr.location_name }}</span><br>
-              <span class="campus">{{ sr.campus_name }}</span>
-            </div>
-            <div class="description">
-              <p>{{ sr.start_time.strftime('%-m/%-d/%y %-I:%M %p') }} - {{ sr.end_time.strftime('%-m/%-d/%y %-I:%M %p') }}</p>
+        <div class="content">
+          <a class="header">{{ sr.event_name }}</a>
+          <div class="meta">
+            <span class="cinema">{{ sr.start_time.strftime('%-m/%-d/%y %-I:%M %p') }} - {{ sr.end_time.strftime('%-m/%-d/%y %-I:%M %p') }}</span>
+          </div>
+          <!--<div class="description">
+            <p></p>
+          </div>-->
+          <div class="extra">
+            <div class="ui label">{{ sr.space_name }} {{ sr.location_name }}</div>
+            <div class="ui label"><i class="student icon"></i> {{ sr.campus_name }}</div>
+            {{ f.begin_form(cancel_reservation_form, flashes, id="cancelreservationform") }}
+            <input id="id" name="id" type="hidden" value="{{ sr.id }}">
+            <input id="type" name="type" type="hidden" value="space">
+            <div class="field">
+            <input class="ui right floated negative button" id="cancel" name="cancel" type="submit" value="Delete" form="cancelreservationform">
             </div>
           </div>
+          </form>
+          </div>
+
         </div>
     {% endfor %}
     </div>
 
 
     <h2 class="ui header">My Equipment Reservations</h2>
+
+    {% if equipment_reservations|length == 0 %}
+      <h4 class="ui header">No equipment reservations.</h4>
+    {% endif %}
     <div class="ui divided items">
     {% for er in equipment_reservations %}
       <div class="item">
-          <div class="content">
-            <div class="header">{{ er.equipment_name }}</div>
-            <div class="meta">
-              <span class="location">{{ er.location_name }}</span><br>
-              <span class="campus">{{ er.campus_name }}</span>
+        <div class="content">
+          <a class="header">{{ er.equipment_name }}</a>
+          <div class="meta">
+            <span class="cinema">{{ er.start_time.strftime('%-m/%-d/%y %-I:%M %p') }} - {{ er.end_time.strftime('%-m/%-d/%y %-I:%M %p') }}</span>
+          </div>
+          <!--<div class="description">
+            <p></p>
+          </div>-->
+          <div class="extra">
+            <div class="ui label">{{ er.location_name }}</div>
+            <div class="ui label"><i class="student icon"></i> {{ er.campus_name }}</div>
+            {{ f.begin_form(cancel_reservation_form, flashes, id="cancelreservationform") }}
+            <input id="id" name="id" type="hidden" value="{{ sr.id }}">
+            <input id="type" name="type" type="hidden" value="equipment">
+            <div class="field">
+              <input class="ui right floated negative button" id="cancel" name="cancel" type="submit" value="Delete" form="cancelreservationform">
             </div>
-            <div class="description">
-              <p>{{ er.start_time.strftime('%-m/%-d/%y %-I:%M %p') }} - {{ er.end_time.strftime('%-m/%-d/%y %-I:%M %p') }}</p>
-            </div>
+          </div>
+          </form>
           </div>
         </div>
     {% endfor %}
-  </div>
+    </div>
+
 {% endmacro %}
 
 {% block content %}
