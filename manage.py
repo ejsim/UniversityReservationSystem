@@ -149,6 +149,24 @@ def add_test_data():
     db.session.add_all([space_ammenity1, space_ammenity2, space_ammenity3, space_ammenity4, space_ammenity5, space_ammenity6, space_ammenity7, space_ammenity8, space_ammenity9, space_ammenity10, space_ammenity11, space_ammenity12])
     db.session.commit()
 
+    et1 = Equipment_Type(name="iPad")
+    et2 = Equipment_Type(name="Macbook")
+    et3 = Equipment_Type(name="Baseball Bat")
+    et4 = Equipment_Type(name="DSLR")
+    et5 = Equipment_Type(name="Van")
+
+    db.session.add_all([et1, et2, et3, et4, et5])
+    db.session.commit()
+
+    e1 = Equipment(equipment_type_id=1, name="1", location_id=2)
+    e2 = Equipment(equipment_type_id=1, name="2", location_id=2)
+    e3 = Equipment(equipment_type_id=1, name="3", location_id=2)
+    e4 = Equipment(equipment_type_id=1, name="4", location_id=2)
+    e5 = Equipment(equipment_type_id=1, name="5", location_id=2)
+
+    db.session.add_all([e1, e2, e3, e4, e5])
+    db.session.commit()
+
 @manager.option(
     '-n',
     '--number-users',

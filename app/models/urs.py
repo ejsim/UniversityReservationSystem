@@ -53,8 +53,8 @@ class Equipment_Type(db.Model):
     last_updated_by = db.Column(db.Integer, db.ForeignKey('users.id'))
 
 class Condition(enum.Enum):
-    GOOD = "Crunchy apple"
-    BAD = "Sweet banana"
+    GOOD = "GOOD"
+    BAD = "BAD"
 
 class Equipment(db.Model):
     __tablename__ = 'equipment'

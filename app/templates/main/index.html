@@ -8,6 +8,7 @@
         {% if (current_user.is_authenticated) %}<h1>Welcome {{ current_user.full_name() }}</h1>{% endif %}
         <h1>I want to...</h1>
         <a href="{% if not (current_user.is_authenticated) %}{{ url_for("account.login")}}{% else %}{{ url_for("reserve.space") }}{% endif %}"><button class="ui button primary massive"> Reserve a Space</button></a>
+        <a href="{% if not (current_user.is_authenticated) %}{{ url_for("account.login")}}{% else %}{{ url_for("reserve.equipment") }}{% endif %}"><button class="ui button primary massive"> Reserve Equipment</button></a>
       </div>
     </div>
 

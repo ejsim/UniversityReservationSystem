@@ -41,3 +41,28 @@ class ReserveSpaceForm(Form):
     space_id = HiddenField('Space ID')
     event_name = StringField('Event Name', [InputRequired(), Length(min=1)])
     reserve = SubmitField('Reserve')
+
+class SearchEquipmentForm(Form):
+    campus = QuerySelectField(
+        'Campus*',
+        get_label='name',
+        validators=[InputRequired()],
+        query_factory=lambda: db.session.query(Campus).order_by('name'),
+        id='select_campus')
+    equipment_type = QuerySelectField(
+        'Equipment Type*',
+        get_label='name',
+        validators=[InputRequired()],
+        query_factory=lambda: db.session.query(Equipment_Type).order_by('name'),
+        id='select_equipment_type')
+    start_time = DateTimeField(
+        'Start Time*', format='%B %d, %Y %I:%M %p')
+    end_time = DateTimeField(
+        'End Time*', format='%B %d, %Y %I:%M %p')
+    search = SubmitField('Search')
+
+class ReserveEquipmentForm(Form):
+    start_time = HiddenField('Start Time')
+    end_time = HiddenField('End Time')
+    equipment_id = HiddenField('Space ID')
+    reserve = SubmitField('Reserve')

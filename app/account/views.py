@@ -100,9 +100,10 @@ def manage():
     for sr in sr_response:
         space_reservations.append(dict(zip(sr.keys(), sr)))
 
-    equipment_sql = '''SELECT er.*, e.name AS equipment_name, l.name AS location_name, c.name AS campus_name
+    equipment_sql = '''SELECT er.*, e.name AS equipment_name, et.name AS equipment_type_name, l.name AS location_name, c.name AS campus_name
     FROM equipment_reservations er
     JOIN equipment e ON e.id=er.equipment_id
+    JOIN equipment_types et ON e.equipment_type_id = et.id
     JOIN locations l ON e.location_id = l.id
     JOIN campuses c ON l.campus_id = c.id
     WHERE er.reserver_id=''' + str(current_user.id) + ";"
