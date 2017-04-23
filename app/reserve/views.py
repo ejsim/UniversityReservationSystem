@@ -14,6 +14,11 @@ def datetimeconverter(o):
     if isinstance(o, datetime.datetime):
         return o.__str__()
 
+
+@reserve.route('/', methods=['GET', 'POST'])
+def index():
+    return render_template('reserve/index.html')
+
 def space_search_sql(campus, space_type, start_time, end_time, capacity=None, ammenities=None):
     sql = """SELECT s.*, l.name AS location_name, CONCAT(l.name, ' ', s.name) AS full_name, c.name AS campus_name
     FROM spaces s
@@ -41,7 +46,7 @@ def space():
         db.session.add(sr)
         db.session.commit()
         print("Reservation Added", file=sys.stderr)
-        return redirect(url_for('account.manage'))
+        return redirect(url_for('main.index'))
     if search_form.is_submitted():
         if not search_form.validate():
             return render_template('reserve/space.html', search_form=search_form, reserve_form=reserve_form)
@@ -82,7 +87,7 @@ def equipment():
         db.session.add(er)
         db.session.commit()
         print("Equipment Reservation Added", file=sys.stderr)
-        return redirect(url_for('account.manage'))
+        return redirect(url_for('main.index'))
     if search_form.validate_on_submit() and search_form.search.data:
         print("Search Submitted", file=sys.stderr)
         sql = equipment_search_sql(str(search_form.campus.data.id), str(search_form.equipment_type.data.id), str(search_form.start_time.data), str(search_form.end_time.data))

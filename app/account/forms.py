@@ -16,10 +16,7 @@ class LoginForm(Form):
     remember_me = BooleanField('Keep me logged in')
     submit = SubmitField('Log in')
 
-class CancelReservationForm(Form):
-    id = StringField('Space ID')
-    type = StringField('Reservation Type')
-    cancel = SubmitField('Cancel')
+
 
 class RegistrationForm(Form):
     first_name = StringField(

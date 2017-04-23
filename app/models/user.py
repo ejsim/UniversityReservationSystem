@@ -3,12 +3,17 @@ from flask_login import AnonymousUserMixin, UserMixin
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 from itsdangerous import BadSignature, SignatureExpired
 from werkzeug.security import check_password_hash, generate_password_hash
+import sys
 
 from .. import db, login_manager
 
 
 class Permission:
     GENERAL = 0x01
+    FACULTY = 0x03
+    ORG_LEADER = 0x05
+    ORGANIZER = 0x0f
+    ROLE_MANAGER = 0x17
     ADMINISTER = 0xff
 
 
@@ -24,7 +29,11 @@ class Role(db.Model):
     @staticmethod
     def insert_roles():
         roles = {
-            'User': (Permission.GENERAL, 'main', True),
+            'Student': (Permission.GENERAL, 'main', True),
+            'Faculty': (Permission.FACULTY, 'main', False),
+            'Student Organization Leader': (Permission.ORG_LEADER, 'main', False),
+            'Event Organizer': (Permission.ORGANIZER, 'admin', False),
+            'Role Manager': (Permission.ROLE_MANAGER, 'admin', False),
             'Administrator': (
                 Permission.ADMINISTER,
                 'admin',
@@ -73,6 +82,11 @@ class User(UserMixin, db.Model):
 
     def is_admin(self):
         return self.can(Permission.ADMINISTER)
+
+    def has_dashboard(self):
+        return self.can(Permission.ADMINISTER) or self.can(Permission.ROLE_MANAGER) or self.can(Permission.ORGANIZER)
+        print("HAS DASHBOARD", file=sys.stderr)
+        #return (self.can(Permission.ADMINISTER) or self.can(Permission.ORGANIZER) or self.can(Permission.ROLE_MANAGER))
 
     @property
     def password(self):
@@ -162,14 +176,16 @@ class User(UserMixin, db.Model):
 
         seed()
         for i in range(count):
+            password=fake.password()
             u = User(
                 first_name=fake.first_name(),
                 last_name=fake.last_name(),
                 email=fake.email(),
-                password=fake.password(),
+                password=password,
                 confirmed=True,
                 role=choice(roles),
                 **kwargs)
+            print("New Fake User:\nEmail: "+ u.email +"\nPassword: "+ password + "\n", file=sys.stderr)
             db.session.add(u)
             try:
                 db.session.commit()
@@ -185,6 +201,9 @@ class AnonymousUser(AnonymousUserMixin):
         return False
 
     def is_admin(self):
+        return False
+
+    def has_dashboard(self):
         return False
 
 

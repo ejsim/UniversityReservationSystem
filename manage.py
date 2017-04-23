@@ -198,6 +198,7 @@ def setup_general():
        Also sets up first admin user."""
     Role.insert_roles()
     admin_query = Role.query.filter_by(name='Administrator')
+    add_fake_data(10)
     if admin_query.first() is not None:
         if User.query.filter_by(email=Config.ADMIN_EMAIL).first() is None:
             user = User(

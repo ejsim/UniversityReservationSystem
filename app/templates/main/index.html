@@ -1,16 +1,112 @@
 {% extends 'layouts/base.html' %}
+{% import 'macros/form_macros.html' as f %}
+{% import 'macros/check_password.html' as check %}
 
-{% block content %}
+{% set endpoints = [
+    ('main.index', 'My Reservations'),
+    ('reserve.index', 'New Reservation')
+] %}
+
+{% macro navigation(items) %}
+    <div class="ui vertical fluid secondary menu">
+        {% for route, name in items %}
+            {% set href = url_for(route) %}
+            <a class="item {% if request.endpoint == route %}active{% endif %}" href="{{ href }}">
+                {{ name }}
+            </a>
+        {% endfor %}
+    </div>
+{% endmacro %}
+
+{% macro user_info(user) %}
+{% set flashes = { 'error': get_flashed_messages(category_filter=['form-error']), 'warning': get_flashed_messages(category_filter=['form-check-email']), 'info': get_flashed_messages(category_filter=['form-info']), 'success': get_flashed_messages(category_filter=['form-success'])
+} %}
+<h2 class="ui header">My Space Reservations</h2>
+
+  {% if space_reservations|length == 0 %}
+    <h4 class="ui header">No space reservations.</h4>
+  {% endif %}
+  <div class="ui divided items">
+{% for sr in space_reservations %}
+
+  <div class="item">
+
+    <div class="content">
+      <a class="header">{{ sr.event_name }}</a>
+      {{ f.begin_form(cancel_reservation_form, flashes, id="cancelreservationform") }}
+      <div class="meta">
+        <span class="cinema">{{ sr.start_time.strftime('%-m/%-d/%y %-I:%M %p') }} - {{ sr.end_time.strftime('%-m/%-d/%y %-I:%M %p') }}</span>
+      </div>
+      <!--<div class="description">
+        <p></p>
+      </div>-->
+      <div class="extra">
+        <div class="ui label"><i class="home icon"></i>{{ sr.space_name }} {{ sr.location_name }}</div>
+        <div class="ui label"><i class="student icon"></i>{{ sr.campus_name }}</div>
+        <input class=" ui right floated negative button" id="cancel" name="cancel" type="submit" value="Delete" form="cancelreservationform">
+        <input id="id" name="id" type="hidden" value="{{ sr.id }}">
+        <input id="type" name="type" type="hidden" value="space">
+      </div>
+      </div>
+    </form>
+
+    </div>
+{% endfor %}
+</div>
 
 
-<div class="ui centered grid container">
-    <div class="eight wide computer sixteen wide mobile column centered">
-        {% if (current_user.is_authenticated) %}<h1>Welcome {{ current_user.full_name() }}</h1>{% endif %}
-        <h1>I want to...</h1>
-        <a href="{% if not (current_user.is_authenticated) %}{{ url_for("account.login")}}{% else %}{{ url_for("reserve.space") }}{% endif %}"><button class="ui button primary massive"> Reserve a Space</button></a>
-        <a href="{% if not (current_user.is_authenticated) %}{{ url_for("account.login")}}{% else %}{{ url_for("reserve.equipment") }}{% endif %}"><button class="ui button primary massive"> Reserve Equipment</button></a>
+<h2 class="ui header">My Equipment Reservations</h2>
+
+{% if equipment_reservations|length == 0 %}
+  <h4 class="ui header">No equipment reservations.</h4>
+{% endif %}
+<div class="ui divided items">
+{% for er in equipment_reservations %}
+  <div class="item">
+    <div class="content">
+      <a class="header">{{ er.equipment_type_name }} {{ er.equipment_name }}</a>
+      {{ f.begin_form(cancel_reservation_form, flashes, id="cancelreservationform") }}
+      <div class="meta">
+        <span class="cinema">{{ er.start_time.strftime('%-m/%-d/%y %-I:%M %p') }} - {{ er.end_time.strftime('%-m/%-d/%y %-I:%M %p') }}</span>
+      </div>
+      <!--<div class="description">
+        <p></p>
+      </div>-->
+      <div class="extra">
+        <div class="ui label"><i class="home icon"></i>{{ er.location_name }}</div>
+        <div class="ui label"><i class="student icon"></i>{{ er.campus_name }}</div>
+        <input id="id" name="id" type="hidden" value="{{ er.id }}">
+        <input id="type" name="type" type="hidden" value="equipment">
+        <input class="field ui right floated negative button" id="cancel" name="cancel" type="submit" value="Delete" form="cancelreservationform">
+      </div>
+      </form>
       </div>
     </div>
+{% endfor %}
+</div>
 
+{% endmacro %}
 
+{% block content %}
+    <div class="ui stackable centered grid container">
+        <div class="twelve wide column">
+            <h2 class="ui header">
+                University Reservation System
+                <div class="sub header">Manage all of your space and equipment reservations.</div>
+            </h2>
+        </div>
+        <div class="stretched divided very relaxed row">
+            <div class="four wide column">
+                {{ navigation(endpoints) }}
+            </div>
+            <div class="eight wide column">
+                {% if form %}
+                    {{ f.render_form(form, extra_classes='fluid') }}
+                {% else %}
+                    {{ user_info(user) }}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    {{ check.password_check('new_password', 0) }}
 {% endblock %}
