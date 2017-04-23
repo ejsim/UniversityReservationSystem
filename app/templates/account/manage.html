@@ -38,8 +38,10 @@
     {% for sr in space_reservations %}
 
       <div class="item">
+
         <div class="content">
           <a class="header">{{ sr.event_name }}</a>
+          {{ f.begin_form(cancel_reservation_form, flashes, id="cancelreservationform") }}
           <div class="meta">
             <span class="cinema">{{ sr.start_time.strftime('%-m/%-d/%y %-I:%M %p') }} - {{ sr.end_time.strftime('%-m/%-d/%y %-I:%M %p') }}</span>
           </div>
@@ -47,17 +49,14 @@
             <p></p>
           </div>-->
           <div class="extra">
-            <div class="ui label"><i class="home icon"></i> {{ sr.space_name }} {{ sr.location_name }}</div>
-            <div class="ui label"><i class="student icon"></i> {{ sr.campus_name }}</div>
-            {{ f.begin_form(cancel_reservation_form, flashes, id="cancelreservationform") }}
+            <div class="ui label"><i class="home icon"></i>{{ sr.space_name }} {{ sr.location_name }}</div>
+            <div class="ui label"><i class="student icon"></i>{{ sr.campus_name }}</div>
+            <input class=" ui right floated negative button" id="cancel" name="cancel" type="submit" value="Delete" form="cancelreservationform">
             <input id="id" name="id" type="hidden" value="{{ sr.id }}">
             <input id="type" name="type" type="hidden" value="space">
-            <div class="field">
-            <input class="ui right floated negative button" id="cancel" name="cancel" type="submit" value="Delete" form="cancelreservationform">
-            </div>
           </div>
-          </form>
           </div>
+        </form>
 
         </div>
     {% endfor %}
@@ -74,6 +73,7 @@
       <div class="item">
         <div class="content">
           <a class="header">{{ er.equipment_type_name }} {{ er.equipment_name }}</a>
+          {{ f.begin_form(cancel_reservation_form, flashes, id="cancelreservationform") }}
           <div class="meta">
             <span class="cinema">{{ er.start_time.strftime('%-m/%-d/%y %-I:%M %p') }} - {{ er.end_time.strftime('%-m/%-d/%y %-I:%M %p') }}</span>
           </div>
@@ -81,14 +81,11 @@
             <p></p>
           </div>-->
           <div class="extra">
-            <div class="ui label"><i class="home icon"></i> {{ er.location_name }}</div>
-            <div class="ui label"><i class="student icon"></i> {{ er.campus_name }}</div>
-            {{ f.begin_form(cancel_reservation_form, flashes, id="cancelreservationform") }}
+            <div class="ui label"><i class="home icon"></i>{{ er.location_name }}</div>
+            <div class="ui label"><i class="student icon"></i>{{ er.campus_name }}</div>
             <input id="id" name="id" type="hidden" value="{{ er.id }}">
             <input id="type" name="type" type="hidden" value="equipment">
-            <div class="field">
-              <input class="ui right floated negative button" id="cancel" name="cancel" type="submit" value="Delete" form="cancelreservationform">
-            </div>
+            <input class="field ui right floated negative button" id="cancel" name="cancel" type="submit" value="Delete" form="cancelreservationform">
           </div>
           </form>
           </div>
