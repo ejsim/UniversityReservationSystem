@@ -9,7 +9,11 @@ from ..email import send_email
 from ..models import *
 from .forms import (ChangeEmailForm, ChangePasswordForm, CreatePasswordForm,
                     LoginForm, RegistrationForm, RequestResetPasswordForm,
+<<<<<<< HEAD
                     ResetPasswordForm, RequestRoleChangeForm)
+=======
+                    ResetPasswordForm)
+>>>>>>> fb1df167e61fd6b47be817b7bc3cb549bf5a1912
 import sys
 
 

@@ -1,0 +1,144 @@
+{% extends 'layouts/base.html' %} {% import 'macros/form_macros.html' as f %} {% block scripts %} {% endblock %} {% block content %}
+
+<div class="ui grid container">
+    <div class="six wide computer sixteen wide mobile column">
+        <h2 class="ui dividing header">Search for Equipment</h2> {% set flashes = { 'error': get_flashed_messages(category_filter=['form-error']), 'warning': get_flashed_messages(category_filter=['form-check-email']), 'info': get_flashed_messages(category_filter=['form-info']), 'success': get_flashed_messages(category_filter=['form-success'])
+      } %} {{ f.begin_form(search_form, flashes, id="searchform") }}
+        <div class="two fields">
+            {{ f.render_form_field(search_form.campus) }} {{ f.render_form_field(search_form.equipment_type) }}
+        </div>
+
+        <div class="two fields">
+            <div class="field">
+                <label>Start Time*</label>
+                <div class="ui calendar" id="rangestart">
+                    <div class="ui input left icon">
+                        <i class="calendar icon"></i>
+                        <input id="start_time" type="text" name="start_time" placeholder="Start">
+                    </div>
+                </div>
+                {% if search_form.start_time.errors %}
+                <div class="ui red pointing label">
+                    {{ search_form.start_time.errors[0] | safe }}
+                </div>
+                {% endif %}
+
+            </div>
+            <div class="field">
+                <label>End Time*</label>
+                <div class="ui calendar" id="rangeend">
+                    <div class="ui input left icon">
+                        <i class="calendar icon"></i>
+                        <input id="start_time" type="text" name="end_time" placeholder="End">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {{ f.form_message(flashes['error'], header='Something went wrong.', class='error') }} {{ f.form_message(flashes['warning'], header='Hm.', class='warning') }} {{ f.form_message(flashes['info'], header='Information', class='info') }} {{ f.form_message(flashes['success'],
+        header='Success!', class='success') }} {% for field in search_form | selectattr('type', 'equalto', 'SubmitField') %} {{ f.render_form_field(field) }} {% endfor %} {{ f.end_form(search_form) }}
+    </div>
+    <br>
+    {% if available_equipment %}
+    {% if available_equipment|length > 0 %}
+    <div class="ten wide computer sixteen wide mobile column centered">
+        <!--<div style="overflow-x: scroll;">-->
+        <h2 class="ui dividing header">Available Equipment</h2>
+        <div class="ui three cards">
+            {% for equipment in available_equipment %}
+            <div class="card">
+                <div class="content">
+                    <div class="header">
+                        {{ equipment['equipment_type_name'] }} {{ equipment['name'] }}
+                    </div>
+                    <div class="description">
+                        Location:  {{ equipment['location_name'] }}
+                        Condition: {{ equipment['condition'] }}
+                    </div>
+                </div>
+                    <div class="ui green bottom attached button show-modal" data-equipment-name="{{ equipment['location_name'] }} {{ equipment['name'] }}" data-equipment-type="{{ search_form.equipment_type.data.name }}" data-campus-name="{{ search_form.campus.data.name }}" data-equipment-id="{{ equipment['id'] }}">Reserve</div>
+            </div>
+            {% endfor %}
+
+        </div>
+    </div>
+
+</div>
+{% else %}
+<h2> No equipment found. </h2> {% endif %}
+
+</div>
+<div class="ui modal small" id="reserve-equipment-modal">
+    <i class="close icon"></i>
+    <div class="ui header">Reserve Equipment</div>
+    <div class="content">
+        <div class="ui two column centered grid container">
+            <div class="five wide computer sixteen wide mobile column centered">
+            {{ f.begin_form(reserve_form, flashes, id="reserveform") }}
+              {{ f.end_form(reserve_form) }}
+                <div class="ui list">
+                    <div class="item">
+                        <div class="header">{{ search_form.start_time.data.strftime('%B %-d, %Y %-I:%M %p') }}</div>
+                    </div>
+                    <div class="item">to</div>
+                    <div class="item">
+                        <div class="header">{{ search_form.end_time.data.strftime('%B %-d, %Y %-I:%M %p') }}</div>
+                    </div>
+                </div>
+            </div>
+            <div class="five wide computer sixteen wide mobile column centered">
+                <div class="ui list">
+                    <div class="item">
+                        <div class="header" id="location-name">Halligan Hall 202</div>
+                    </div>
+                    <div class="item">
+                        <div class="header" id="campus-name">Medford/Somerville</div>
+                    </div>
+                    <div class="item" id="equipment-type">Classroom</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="actions">
+        <div class="ui black deny button">
+            Cancel
+        </div>
+        <input type="submit" value="Reserve" id="submit" form="reserveform" class="ui positive right labeled icon button">
+        </div>
+    </div>
+</div>
+{% endif %}
+
+<!-- THESE SCRIPT TAGS NECESSARY FOR CALENDAR POP-UPS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.4/semantic.min.js"></script>
+<script src="https://cdn.rawgit.com/mdehoog/Semantic-UI-Calendar/76959c6f7d33a527b49be76789e984a0a407350b/dist/calendar.min.js"></script>
+
+<script type="text/javascript">
+    $('#rangestart').calendar({
+        endCalendar: $('#rangeend')
+    });
+    $('#rangeend').calendar({
+        startCalendar: $('#rangestart')
+    });
+
+    var modal = $('#reserve-equipment-modal') // hold reference to modal
+    equipmentName = $('#equipment-name'),
+    equipmentType = $('#equipment-type'),
+    campusName = $('#campus-name')
+    equipmentID = $('#equipment_id');
+
+    //give your button an easier class reference
+    $('.show-modal').on('click', function() {
+        var button = $(this);
+        equipmentName.text(button.data('equipment-name'));
+        equipmentType.text(button.data('equipment-type'));
+        campusName.text(button.data('campus-name'));
+        console.log("Equipment ID Data:");
+        console.log(button.data('equipment-id'));
+        document.getElementById("equipment_id").value = button.data('equipment-id');
+        console.log(document.getElementById("equipment_id").value);
+        modal.modal('show');
+    });
+</script>
+{% endblock %}

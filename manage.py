@@ -158,11 +158,19 @@ def add_test_data():
     db.session.add_all([et1, et2, et3, et4, et5])
     db.session.commit()
 
+<<<<<<< HEAD
     e1 = Equipment(equipment_type_id=1, name="1", location_id=2, min_role=Permission.STUDENT)
     e2 = Equipment(equipment_type_id=1, name="2", location_id=2, min_role=Permission.STUDENT)
     e3 = Equipment(equipment_type_id=1, name="3", location_id=2, min_role=Permission.STUDENT)
     e4 = Equipment(equipment_type_id=1, name="4", location_id=2, min_role=Permission.STUDENT)
     e5 = Equipment(equipment_type_id=1, name="5", location_id=2, min_role=Permission.STUDENT)
+=======
+    e1 = Equipment(equipment_type_id=1, name="1", location_id=2)
+    e2 = Equipment(equipment_type_id=1, name="2", location_id=2)
+    e3 = Equipment(equipment_type_id=1, name="3", location_id=2)
+    e4 = Equipment(equipment_type_id=1, name="4", location_id=2)
+    e5 = Equipment(equipment_type_id=1, name="5", location_id=2)
+>>>>>>> fb1df167e61fd6b47be817b7bc3cb549bf5a1912
 
     db.session.add_all([e1, e2, e3, e4, e5])
     db.session.commit()

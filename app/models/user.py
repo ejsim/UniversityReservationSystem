@@ -4,14 +4,20 @@ from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 from itsdangerous import BadSignature, SignatureExpired
 from werkzeug.security import check_password_hash, generate_password_hash
 import sys
+<<<<<<< HEAD
 import datetime
+=======
+>>>>>>> fb1df167e61fd6b47be817b7bc3cb549bf5a1912
 
 from .. import db, login_manager
 
 
 class Permission:
     GENERAL = 0x01
+<<<<<<< HEAD
     STUDENT = 0x02
+=======
+>>>>>>> fb1df167e61fd6b47be817b7bc3cb549bf5a1912
     FACULTY = 0x03
     ORG_LEADER = 0x05
     ORGANIZER = 0x0f
@@ -31,8 +37,12 @@ class Role(db.Model):
     @staticmethod
     def insert_roles():
         roles = {
+<<<<<<< HEAD
             'Public': (Permission.GENERAL, 'main', True),
             'Student': (Permission.STUDENT, 'main', True),
+=======
+            'Student': (Permission.GENERAL, 'main', True),
+>>>>>>> fb1df167e61fd6b47be817b7bc3cb549bf5a1912
             'Faculty': (Permission.FACULTY, 'main', False),
             'Student Organization Leader': (Permission.ORG_LEADER, 'main', False),
             'Event Organizer': (Permission.ORGANIZER, 'admin', False),
