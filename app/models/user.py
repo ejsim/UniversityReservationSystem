@@ -3,12 +3,19 @@ from flask_login import AnonymousUserMixin, UserMixin
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 from itsdangerous import BadSignature, SignatureExpired
 from werkzeug.security import check_password_hash, generate_password_hash
+import sys
+import datetime
 
 from .. import db, login_manager
 
 
 class Permission:
     GENERAL = 0x01
+    STUDENT = 0x02
+    FACULTY = 0x03
+    ORG_LEADER = 0x05
+    ORGANIZER = 0x0f
+    ROLE_MANAGER = 0x17
     ADMINISTER = 0xff
 
 
@@ -24,7 +31,12 @@ class Role(db.Model):
     @staticmethod
     def insert_roles():
         roles = {
-            'User': (Permission.GENERAL, 'main', True),
+            'Public': (Permission.GENERAL, 'main', True),
+            'Student': (Permission.STUDENT, 'main', True),
+            'Faculty': (Permission.FACULTY, 'main', False),
+            'Student Organization Leader': (Permission.ORG_LEADER, 'main', False),
+            'Event Organizer': (Permission.ORGANIZER, 'admin', False),
+            'Role Manager': (Permission.ROLE_MANAGER, 'admin', False),
             'Administrator': (
                 Permission.ADMINISTER,
                 'admin',
@@ -44,6 +56,23 @@ class Role(db.Model):
     def __repr__(self):
         return '<Role \'%s\'>' % self.name
 
+class Request_Status:
+    PENDING = 0x01
+    REJECTED = 0x02
+    APPROVED = 0x03
+
+class Role_Request(db.Model):
+    __tablename__ = 'role_requests'
+    id = db.Column(db.Integer, primary_key=True)
+    user = db.Column(db.Integer, db.ForeignKey('users.id'))
+    curr_role = db.Column(db.Integer, db.ForeignKey('users.role_id'))
+    requested_role = db.Column(db.Integer, db.ForeignKey('roles.id'))
+    reason = db.Column(db.String(256))
+    status = db.Column(db.Integer)
+    date_created = db.Column(db.DateTime, default=datetime.datetime.utcnow)
+    created_by = db.Column(db.Integer, db.ForeignKey('users.id'))
+    last_updated = db.Column(db.DateTime, default=datetime.datetime.utcnow)
+    last_updated_by = db.Column(db.Integer, db.ForeignKey('users.id'))
 
 class User(UserMixin, db.Model):
     __tablename__ = 'users'
@@ -73,6 +102,11 @@ class User(UserMixin, db.Model):
 
     def is_admin(self):
         return self.can(Permission.ADMINISTER)
+
+    def has_dashboard(self):
+        return self.can(Permission.ADMINISTER) or self.can(Permission.ROLE_MANAGER) or self.can(Permission.ORGANIZER)
+        print("HAS DASHBOARD", file=sys.stderr)
+        #return (self.can(Permission.ADMINISTER) or self.can(Permission.ORGANIZER) or self.can(Permission.ROLE_MANAGER))
 
     @property
     def password(self):
@@ -162,14 +196,16 @@ class User(UserMixin, db.Model):
 
         seed()
         for i in range(count):
+            password=fake.password()
             u = User(
                 first_name=fake.first_name(),
                 last_name=fake.last_name(),
                 email=fake.email(),
-                password=fake.password(),
+                password=password,
                 confirmed=True,
                 role=choice(roles),
                 **kwargs)
+            print("New Fake User:\nEmail: "+ u.email +"\nPassword: "+ password + "\n", file=sys.stderr)
             db.session.add(u)
             try:
                 db.session.commit()
@@ -185,6 +221,9 @@ class AnonymousUser(AnonymousUserMixin):
         return False
 
     def is_admin(self):
+        return False
+
+    def has_dashboard(self):
         return False
 
 

@@ -3,10 +3,12 @@ from flask_wtf import Form
 from wtforms import ValidationError
 from wtforms.fields import (BooleanField, PasswordField, StringField,
                             SubmitField, HiddenField)
+from wtforms.ext.sqlalchemy.fields import QuerySelectMultipleField, QuerySelectField
 from wtforms.fields.html5 import EmailField
 from wtforms.validators import Email, EqualTo, InputRequired, Length
 
-from ..models import User
+from .. import db
+from ..models import *
 
 
 class LoginForm(Form):
@@ -16,10 +18,7 @@ class LoginForm(Form):
     remember_me = BooleanField('Keep me logged in')
     submit = SubmitField('Log in')
 
-class CancelReservationForm(Form):
-    id = StringField('Space ID')
-    type = StringField('Reservation Type')
-    cancel = SubmitField('Cancel')
+
 
 class RegistrationForm(Form):
     first_name = StringField(
@@ -50,6 +49,17 @@ class RequestResetPasswordForm(Form):
 
     # We don't validate the email address so we don't confirm to attackers
     # that an account with the given email exists.
+
+class RequestRoleChangeForm(Form):
+    role = QuerySelectField(
+        'New Role',
+        get_label='name',
+        validators=[InputRequired()],
+        query_factory=lambda: db.session.query(Role).order_by('permissions'),
+        id='role')
+    reason = StringField('Reason for request', 
+        validators=[Length(1, 256)])
+    submit = SubmitField('Submit request')
 
 
 class ResetPasswordForm(Form):

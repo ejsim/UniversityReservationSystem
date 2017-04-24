@@ -93,39 +93,39 @@ def add_test_data():
     # 9: Study Room
 
     #Halligan id=1
-    space1 = Space(name='102', capacity=15, space_type_id=8, location_id=1)
-    space2 = Space(name='211', capacity=15, space_type_id=8, location_id=1)
-    space3 = Space(name='Kitchen', capacity=15, space_type_id=5, location_id=1)
+    space1 = Space(name='102', capacity=15, space_type_id=8, location_id=1, min_role=Permission.FACULTY)
+    space2 = Space(name='211', capacity=15, space_type_id=8, location_id=1, min_role=Permission.FACULTY)
+    space3 = Space(name='Kitchen', capacity=15, space_type_id=5, location_id=1, min_role=Permission.STUDENT)
     db.session.add_all([space1, space2, space3])
 
     #Tisch id=2
-    space1 = Space(name='113a', capacity=15, space_type_id=9, location_id=2)
-    space2 = Space(name='Downstairs Computer Lab', capacity=15, space_type_id=8, location_id=2)
-    space3 = Space(name='112b', capacity=15, space_type_id=9, location_id=2)
+    space1 = Space(name='113a', capacity=15, space_type_id=9, location_id=2, min_role=Permission.PUBLIC)
+    space2 = Space(name='Downstairs Computer Lab', capacity=15, space_type_id=8, location_id=2, min_role=Permission.FACULTY)
+    space3 = Space(name='112b', capacity=15, space_type_id=9, location_id=2, min_role=Permission.PUBLIC)
     db.session.add_all([space1, space2, space3])
 
     #Eaton id=3
-    space1 = Space(name='Computer Lab', capacity=15, space_type_id=8, location_id=3)
-    space2 = Space(name='105', capacity=15, space_type_id=8, location_id=3)
-    space3 = Space(name='210', capacity=15, space_type_id=8, location_id=3)
+    space1 = Space(name='Computer Lab', capacity=15, space_type_id=8, location_id=3, min_role=Permission.ORG_LEADER)
+    space2 = Space(name='105', capacity=15, space_type_id=8, location_id=3, min_role=Permission.FACULTY)
+    space3 = Space(name='210', capacity=15, space_type_id=8, location_id=3, min_role=Permission.FACULTY)
     db.session.add_all([space1, space2, space3])
 
     #Olin id=4
-    space1 = Space(name='102', capacity=15, space_type_id=8, location_id=4)
-    space2 = Space(name='Downstairs Lobby', capacity=15, space_type_id=5, location_id=4)
-    space3 = Space(name='212', capacity=15, space_type_id=5, location_id=4)
+    space1 = Space(name='102', capacity=15, space_type_id=8, location_id=4, min_role=Permission.FACULTY)
+    space2 = Space(name='Downstairs Lobby', capacity=15, space_type_id=5, location_id=4, min_role=Permission.STUDENT)
+    space3 = Space(name='212', capacity=15, space_type_id=5, location_id=4, min_role=Permission.ORG_LEADER)
     db.session.add_all([space1, space2, space3])
 
     #Pres-Lawn id=5
-    space1 = Space(name='Outside of President House', capacity=15, space_type_id=7, location_id=5)
-    space2 = Space(name='The Lighting Ceremony Spot', capacity=15, space_type_id=7, location_id=5)
-    space3 = Space(name='Spring Fling Space', capacity=15, space_type_id=7, location_id=5)
+    space1 = Space(name='Outside of President House', capacity=15, space_type_id=7, location_id=5, min_role=Permission.ORGANIZER)
+    space2 = Space(name='The Lighting Ceremony Spot', capacity=15, space_type_id=7, location_id=5, min_role=Permission.ORGANIZER)
+    space3 = Space(name='Spring Fling Space', capacity=15, space_type_id=7, location_id=5, min_role=Permission.ORGANIZER)
     db.session.add_all([space1, space2, space3])
 
     #Tennis Courts id=6
-    space1 = Space(name='Court 1', space_type_id=6, location_id=6)
-    space2 = Space(name='Court 2', space_type_id=6, location_id=6)
-    space3 = Space(name='Court 3', space_type_id=6, location_id=6)
+    space1 = Space(name='Court 1', space_type_id=6, location_id=6, min_role=Permission.PUBLIC)
+    space2 = Space(name='Court 2', space_type_id=6, location_id=6, min_role=Permission.PUBLIC)
+    space3 = Space(name='Court 3', space_type_id=6, location_id=6, min_role=Permission.PUBLIC)
     db.session.add_all([space1, space2, space3])
 
     db.session.commit()
@@ -147,6 +147,24 @@ def add_test_data():
 
 
     db.session.add_all([space_ammenity1, space_ammenity2, space_ammenity3, space_ammenity4, space_ammenity5, space_ammenity6, space_ammenity7, space_ammenity8, space_ammenity9, space_ammenity10, space_ammenity11, space_ammenity12])
+    db.session.commit()
+
+    et1 = Equipment_Type(name="iPad")
+    et2 = Equipment_Type(name="Macbook")
+    et3 = Equipment_Type(name="Baseball Bat")
+    et4 = Equipment_Type(name="DSLR")
+    et5 = Equipment_Type(name="Van")
+
+    db.session.add_all([et1, et2, et3, et4, et5])
+    db.session.commit()
+
+    e1 = Equipment(equipment_type_id=1, name="1", location_id=2, min_role=Permission.STUDENT)
+    e2 = Equipment(equipment_type_id=1, name="2", location_id=2, min_role=Permission.STUDENT)
+    e3 = Equipment(equipment_type_id=1, name="3", location_id=2, min_role=Permission.STUDENT)
+    e4 = Equipment(equipment_type_id=1, name="4", location_id=2, min_role=Permission.STUDENT)
+    e5 = Equipment(equipment_type_id=1, name="5", location_id=2, min_role=Permission.STUDENT)
+
+    db.session.add_all([e1, e2, e3, e4, e5])
     db.session.commit()
 
 @manager.option(
@@ -180,6 +198,7 @@ def setup_general():
        Also sets up first admin user."""
     Role.insert_roles()
     admin_query = Role.query.filter_by(name='Administrator')
+    add_fake_data(10)
     if admin_query.first() is not None:
         if User.query.filter_by(email=Config.ADMIN_EMAIL).first() is None:
             user = User(

@@ -53,8 +53,8 @@ class Equipment_Type(db.Model):
     last_updated_by = db.Column(db.Integer, db.ForeignKey('users.id'))
 
 class Condition(enum.Enum):
-    GOOD = "Crunchy apple"
-    BAD = "Sweet banana"
+    GOOD = "GOOD"
+    BAD = "BAD"
 
 class Equipment(db.Model):
     __tablename__ = 'equipment'
@@ -63,6 +63,7 @@ class Equipment(db.Model):
     equipment_type_id = db.Column(db.Integer, db.ForeignKey('equipment_types.id'))
     location_id = db.Column(db.Integer, db.ForeignKey('locations.id'))
     condition = db.Column(db.Enum(Condition))
+    min_role = db.Column(db.Integer)
     date_created = db.Column(db.DateTime, default=datetime.datetime.utcnow)
     created_by = db.Column(db.Integer, db.ForeignKey('users.id'))
     last_updated = db.Column(db.DateTime, default=datetime.datetime.utcnow)
@@ -98,6 +99,7 @@ class Space(db.Model):
     location_id = db.Column(db.Integer, db.ForeignKey('locations.id'))
     space_type_id = db.Column(db.Integer, db.ForeignKey('space_types.id'))
     condition = db.Column(db.Enum(Condition))
+    min_role = db.Column(db.Integer)
     date_created = db.Column(db.DateTime, default=datetime.datetime.utcnow)
     created_by = db.Column(db.Integer, db.ForeignKey('users.id'))
     last_updated = db.Column(db.DateTime, default=datetime.datetime.utcnow)
