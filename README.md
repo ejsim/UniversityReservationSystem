@@ -7,7 +7,7 @@ An application that allows the creation of room reservations based on desired at
 ##### Clone the repo
 
 ```
-$ git clone git@github.com:tuftsdev/comp120-s2017-team7.git
+$ git clone git@github.com:ejsim/UniversityReservationSystem.git
 ```
 
 ##### Initialize a virtualenv
@@ -148,7 +148,7 @@ The default port of this application is http://127.0.0.1:5000/
 ## Code for quick run without explanation;
 
 ```
-$ git clone git@github.com:tuftsdev/comp120-s2017-team7.git
+$ git clone git@github.com:ejsim/UniversityReservationSystem.git
 $ python3 -m venv ./venv
 $ source ./venv/bin/activate
 $ pip3 install -r requirements.txt
