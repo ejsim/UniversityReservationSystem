@@ -1,6 +1,6 @@
 # University Reservation System 
 
-An application that allows the creation of room reservations based on desired attributes.
+An application that allows the creation of room reservations based on desired attributes. [See the live version!](http://urs-tufts.herokuapp.com/)
 
 ## Setting up
 
